@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Learning Hub</title>
+  <title>Aviation Security Learning Hub</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* ====== Base (Apple-ish) ====== */
@@ -143,7 +143,7 @@
       padding: 12px 14px;
       background: #f9fafb;
       font-size: 14px;
-      min-height: 150px;
+      min-height: 180px;
       white-space: pre-wrap;
     }
 
@@ -216,7 +216,7 @@
     .flashcard {
       width: 100%;
       max-width: 460px;
-      height: 180px;
+      height: 200px;
       border-radius: 18px;
       background: linear-gradient(145deg, #ffffff, #f9fafb);
       border: 1px solid #e5e7eb;
@@ -323,7 +323,7 @@
 <body>
   <div class="app-shell">
     <header>
-      <h1>Learning Hub</h1>
+      <h1>Aviation Security Learning Hub</h1>
       <p>Content • Flashcards • Mock Tests</p>
     </header>
 
@@ -363,7 +363,7 @@
     <section id="tab-flashcards" class="panel hidden">
       <div class="panel-title">Flashcards</div>
       <div class="panel-subtitle">
-        Pick a topic and flip through the key questions & answers.
+        Pick a topic and flip through key questions & answers.
       </div>
 
       <div class="row">
@@ -403,7 +403,7 @@
         </div>
       </div>
 
-      <div class="mt-16" id="quizArea" class="hidden">
+      <div class="mt-16 hidden" id="quizArea">
         <div class="quiz-meta">
           <span id="quizProgress"></span>
           <span id="quizTopicLabel"></span>
@@ -422,132 +422,591 @@
   </div>
 
   <script>
-    // ===== Data (edit here for your own content) =====
+    // ===== Topics =====
     const topics = [
-      { id: 1, name: "UK Aviation Governance" },
-      { id: 2, name: "Safety & Security" },
-      { id: 3, name: "Environment & Noise" }
+      { id: 1, name: "Aviation Security – Overview" },
+      { id: 2, name: "DfT – What & Basics" },
+      { id: 3, name: "CAA – What & Basics" },
+      { id: 4, name: "Heathrow – What & Basics" },
+      { id: 5, name: "DfT vs CAA vs Heathrow" },
+      { id: 6, name: "Threat = Motivation, Intent, Capability" },
+      { id: 7, name: "Threat Levels" },
+      { id: 8, name: "Sources of Threats" },
+      { id: 9, name: "Types of Attack" },
+      { id: 10, name: "Locations of Attack" },
+      { id: 11, name: "Types of Devices (PB / VB / DB)" },
+      { id: 12, name: "Security Behaviour – Golden Rules" },
+      { id: 13, name: "RFX & X-Ray" },
+      { id: 14, name: "Prohibited – Cabin Only" },
+      { id: 15, name: "Prohibited – Cabin & Hold" },
+      { id: 16, name: "UK Single Consolidated Direction" },
+      { id: 17, name: "Firearms (FA) – Definition" },
+      { id: 18, name: "Suspicious Signs of Concealment" },
+      { id: 19, name: "Handling Prohibited Items (non-FA/EX)" },
+      { id: 20, name: "Handling FA / Explosives Concealed" },
+      { id: 21, name: "Firearm (RE) Components" },
+      { id: 22, name: "Self-loading Firearm Components" },
+      { id: 23, name: "Ammunition Components" },
+      { id: 24, name: "3D / CT X-Ray – Capabilities & Limits" },
+      { id: 25, name: "CT Test Bag" },
+      { id: 26, name: "X-Ray Colours – Organic / Inorganic / Mixed" },
+      { id: 27, name: "Density – Bright vs Light" },
+      { id: 28, name: "EDS – Explosive Detection System" },
+      { id: 29, name: "Obvious Threat Button" },
+      { id: 30, name: "Shield – Density Alarm" },
+      { id: 31, name: "Operator Alarms (HSO – purple/pink)" },
+      { id: 32, name: "CIP – Centralised Image Processing" },
+      { id: 33, name: "TIP – Threat Image Projection" },
+      { id: 34, name: "TIP Pop-up Messages" }
     ];
 
+    // ===== Content items =====
     const contentItems = [
       {
         id: 1,
         topicId: 1,
-        title: "Tripartite Structure Overview",
+        title: "What is Aviation Security?",
         body:
-          "The UK aviation system is structured around three key bodies:\n\n" +
-          "- Department for Transport (DfT): policy maker and sponsor.\n" +
-          "- Civil Aviation Authority (CAA): independent regulator.\n" +
-          "- Heathrow Airport Ltd (HAL): private operator and delivery body.\n\n" +
-          "This separation helps avoid conflicts of interest between policy, regulation and delivery."
+" Aviation security is all the measures used to protect passengers, staff, aircraft and airport infrastructure from unlawful interference.\n\nIt covers:\n- People (screening, behaviour).\n- Baggage and cargo screening.\n- Airport infrastructure and airspace.\n\nYou are part of this system every shift."
       },
       {
         id: 2,
-        topicId: 1,
-        title: "Role of DfT",
+        topicId: 2,
+        title: "DfT – Role and Basics",
         body:
-          "The Department for Transport (DfT) sets strategic policy for aviation and is accountable to Parliament.\n\n" +
-          "Examples:\n" +
-          "- Airports National Policy Statement (NPS).\n" +
-          "- Overall capacity and connectivity objectives.\n\n" +
-          "DfT does not run airports; it enables others to deliver."
+" The Department for Transport (DfT) is a UK government department.\n\nWhat it is:\n- Policy maker and sponsor for transport, including aviation.\n\nWhat it does:\n- Sets strategic policy and legal framework (e.g. aviation security rules, threat levels).\n- Is accountable to Parliament for aviation strategy.\n\nDfT does not run airports; it enables others to deliver."
       },
       {
         id: 3,
-        topicId: 2,
-        title: "CAA Core Duties",
+        topicId: 3,
+        title: "CAA – Role and Basics",
         body:
-          "The Civil Aviation Authority (CAA) regulates safety, security and economic aspects of aviation.\n\n" +
-          "Its primary duty is to protect the interests of consumers/passengers while enabling sustainable growth.\n\n" +
-          "It uses licences, inspections and price controls to influence operator behaviour."
+" The Civil Aviation Authority (CAA) is an independent regulator.\n\nWhat it is:\n- Public corporation, separate from day-to-day politics.\n\nWhat it does:\n- Regulates aviation safety, security and economic aspects.\n- Oversees compliance with security rules.\n- Has a primary duty to protect the interests of consumers/passengers.\n\nIt uses licences, inspections and enforcement to influence behaviour."
       },
       {
         id: 4,
-        topicId: 3,
-        title: "Noise and Carbon Mitigation",
+        topicId: 4,
+        title: "Heathrow – Role and Basics",
         body:
-          "All three bodies share objectives to minimise aviation noise and carbon.\n\n" +
-          "- DfT sets legal obligations and overall carbon targets.\n" +
-          "- CAA monitors performance and airspace efficiency.\n" +
-          "- Heathrow implements mitigation: quieter procedures, insulation schemes, and surface access plans."
+" Heathrow Airport Ltd (HAL) is the airport operator.\n\nWhat it is:\n- Private company responsible for owning and operating the airport infrastructure.\n\nWhat it does:\n- Runs day-to-day airport operations.\n- Implements security measures and procedures on the ground.\n- Responsible for delivering projects like runway or terminal expansion."
+      },
+      {
+        id: 5,
+        topicId: 5,
+        title: "Similarities & Differences",
+        body:
+" Similarities (DfT, CAA, Heathrow):\n- All are part of the aviation security system.\n- All focus on safety and security for passengers and staff.\n\nDifferences:\n- DfT: Sets policy and law, accountable to Parliament.\n- CAA: Regulates and oversees compliance, protects passengers.\n- Heathrow: Delivers operations and implements security on site.\n\nRemember: Policy (DfT) – Regulator (CAA) – Operator (Heathrow)."
+      },
+      {
+        id: 6,
+        topicId: 6,
+        title: "Threat = Motivation, Intent, Capability",
+        body:
+" A threat in aviation security is a combination of:\n- Motivation: Why someone wants to cause harm.\n- Intent: Their decision to act.\n- Capability: Their ability and resources to act.\n\nMnemonic: “My Intent Creates Threat” (MITC):\n- Motivation → Intent → Capability → Threat.\n\nIf any of these increases, overall threat can rise."
+      },
+      {
+        id: 7,
+        topicId: 7,
+        title: "Threat Levels (UK)",
+        body:
+" UK threat levels describe how likely an attack is:\n\n- Low: Highly unlikely.\n- Moderate: Possible but not likely.\n- Substantial: Likely.\n- Severe: Highly likely.\n- Critical: Highly likely in the near future.\n\nCurrent threat level (very important):\n- Substantial – Likely.\n\nYou must always know the current level and follow instructions."
+      },
+      {
+        id: 8,
+        topicId: 8,
+        title: "Sources of Threats",
+        body:
+" Threats to aviation can come from:\n- Terrorists.\n- Insiders.\n- Persons acting unruly.\n- Refugees.\n- Criminals.\n- Radicalised persons.\n\nMnemonic: “Trouble Is Usually Rooted in Clever Radicals”:\n- Trouble → Terrorists.\n- Is → Insiders.\n- Usually → Unruly persons.\n- Rooted → Refugees.\n- Clever → Criminals.\n- Radicals → Radicalised persons."
+      },
+      {
+        id: 9,
+        topicId: 9,
+        title: "Types of Attack",
+        body:
+" Common attack types:\n- MTA: Marauding terrorist attack (mobile, moving attackers).\n- Sabotage: Deliberate damage to equipment or infrastructure.\n- Cyberattack: Attacking IT systems and data.\n- Hijacking: Taking control of an aircraft.\n\nMnemonic: “Most Serious Critical Hazards” (MSCH) to remember the categories."
+      },
+      {
+        id: 10,
+        topicId: 10,
+        title: "Locations of Attack",
+        body:
+" Attacks can be grouped by location:\n- On Airport: Inside the airport perimeter or terminals.\n- Off Airport: Near or around the airport, or on connecting infrastructure (roads, rail, etc.).\n- On Airplane: In the aircraft cabin or hold.\n\nThink: On – Off – On (Airport → Around → Airplane)."
+      },
+      {
+        id: 11,
+        topicId: 11,
+        title: "Types of Devices (PB / VB / DB)",
+        body:
+" Devices can be classified by how they are carried:\n- PB: Person-borne (carried on the body or in clothing).\n- VB: Vehicle-borne (placed in or on a vehicle).\n- DB: Drone-borne (carried by a drone).\n\nRemember: People, Vehicles, Drones.\nAlways think how a device could be moved to the target."
+      },
+      {
+        id: 12,
+        topicId: 12,
+        title: "Security Behaviour – Golden Rules",
+        body:
+" Extremely important behaviours:\n\n- Be wary of inappropriate questions from anyone.\n- Do NOT discuss security matters with people who do not need to know.\n- No social media posts about security, procedures or restricted areas.\n- Keep PINs, passwords, keys, ID and equipment safe at all times.\n- If anything is compromised, inform your Security Manager (SM) immediately.\n- Keep uniform branding hidden outside work; do not dispose uniforms at home—return to SM.\n- Never misuse ID.\n\nPoor behaviour can lead to job loss, criminal charges and serious safety risks."
+      },
+      {
+        id: 13,
+        topicId: 13,
+        title: "RFX & X-Ray",
+        body:
+" RFX: Recognition of Firearms and Explosives.\n\nYou must:\n- Recognise shapes and components of firearms and explosives.\n- Use X-ray images to identify suspicious items and concealed devices.\n\nX-ray screening is a key barrier against prohibited articles."
+      },
+      {
+        id: 14,
+        topicId: 14,
+        title: "Prohibited – Cabin Only",
+        body:
+" Examples of items prohibited in the cabin:\n\n- Scissors with blades 6 cm or more from the pivot.\n- Sharp blades with blade length 6 cm or more.\n- Razor blades.\n- Large liquids over the allowed volume (e.g. >100 ml, check local rules).\n- Any item classified as a prohibited article.\n\nThese may be allowed in hold baggage depending on rules, but not in the cabin."
+      },
+      {
+        id: 15,
+        topicId: 15,
+        title: "Prohibited – Cabin and Hold",
+        body:
+" Items prohibited in both cabin and hold include:\n\n- Undeclared firearms and ammunition / gunpowder.\n- Explosive material.\n- Any detonators or fuses.\n- Any grenades or smoke grenades.\n- Fireworks and pyrotechnics, including party poppers and Christmas crackers, because they contain gunpowder-like material.\n\nThese are not allowed anywhere on the aircraft."
+      },
+      {
+        id: 16,
+        topicId: 16,
+        title: "UK Single Consolidated Direction",
+        body:
+" The UK Single Consolidated Direction (SCD):\n\n- Sets the law for prohibited items and aviation security measures in the UK.\n- Replaced EU security law after Brexit.\n\nIt defines what is prohibited in cabin and hold and underpins your screening procedures."
+      },
+      {
+        id: 17,
+        topicId: 17,
+        title: "Firearms (FA) – Definition",
+        body:
+" A firearm is any device that allows launching a projectile, solid or liquid.\n\nImportant:\n- Treated as a firearm if it appears capable of firing, even if not currently working.\n- Imitation or deactivated firearms can still be security concerns.\n\nAlways treat suspected firearms seriously and follow procedure."
+      },
+      {
+        id: 18,
+        topicId: 18,
+        title: "Suspicious Signs of Concealment",
+        body:
+" When screening bags or items, look for:\n- Unusual location of dense objects.\n- Abnormal weight or balance.\n- Extra stitching.\n- Extra zips.\n- Extra pockets or compartments.\n\nThese may indicate concealed prohibited items or devices."
+      },
+      {
+        id: 19,
+        topicId: 19,
+        title: "Handling Prohibited Items (non-FA/EX)",
+        body:
+" For prohibited items excluding firearms and explosives:\n\nIf found on a body search:\n- Inform the Security Manager (SM) discreetly.\n- Report the search as INCOMPLETE until instructed.\n\nIf found in a bag search:\n- Keep the item away from the passenger.\n- Continue and complete the bag search.\n- Inform SM discreetly and report the search as COMPLETE.\n\nAlways follow local SOP and never confront aggressively."
+      },
+      {
+        id: 20,
+        topicId: 20,
+        title: "Handling FA / Explosives Concealed",
+        body:
+" For suspected firearms or explosives (FA/EX):\n\nIf found in a body search or bag search:\n- Stop the search IMMEDIATELY.\n- Discreetly inform the Security Manager (SM).\n- Advise that the search is INCOMPLETE.\n\nDo not handle the item further unless specifically trained and instructed."
+      },
+      {
+        id: 21,
+        topicId: 21,
+        title: "RE Firearm Components",
+        body:
+" Basic revolver (RE) components:\n- Main frame.\n- Crane.\n- Cylinder.\n\nMnemonic example: “Cool Metal Cylinder”:\n- Cool → Crane.\n- Metal → Main frame.\n- Cylinder → Cylinder.\n\nLearn how these appear on X-ray to spot concealed firearms."
+      },
+      {
+        id: 22,
+        topicId: 22,
+        title: "Self-loading Firearm Components",
+        body:
+" Common self-loading firearm components:\n- Barrel.\n- Main frame.\n- Return spring.\n- Return spring guide.\n- Magazine.\n- Cross pin.\n- Top slide.\n\nMnemonic: “Big Metal Rifle Runs Magazines Cleanly & Tight”:\n- Big → Barrel.\n- Metal → Main frame.\n- Rifle → Return spring.\n- Runs → Return spring guide.\n- Magazines → Magazine.\n- Cleanly → Cross pin.\n- Tight → Top slide."
+      },
+      {
+        id: 23,
+        topicId: 23,
+        title: "Ammunition Components",
+        body:
+" Basic ammunition components:\n- Bullet (projectile).\n- Case (casing).\n- Primer.\n- Powder (propellant).\n\nMnemonic: BCPP – Bullet, Case, Primer, Powder.\n\nRecognising these parts on X-ray helps detect concealed ammunition."
+      },
+      {
+        id: 24,
+        topicId: 24,
+        title: "3D / CT X-Ray – Capabilities & Limits",
+        body:
+" Capabilities:\n- See inside bags without opening.\n- 360° rotation and slice functions.\n- Electricals and liquids can stay in the bag.\n- Highlights potential explosives and prohibited articles.\n\nLimitations:\n- Still subject to human error and operator fatigue.\n- Cannot screen items larger than tray size.\n- Operators typically limited to ~20 minutes of continuous screen-reading and ~30 seconds per decision.\n- Can damage camera film.\n- Does not penetrate very dense objects effectively.\n\nMnemonic: “FISH” – Fatigue, Image rotation, Size limit, Heavy objects."
+      },
+      {
+        id: 25,
+        topicId: 25,
+        title: "CT Test Bag",
+        body:
+" CT equipment testing:\n- Uses special test bags with a red square and yellow square.\n- Shaped like a case and used by Security Managers to test calibration.\n- These bags must ALWAYS be rejected when detected.\n\nThey confirm that the machine is working and correctly highlighting threats."
+      },
+      {
+        id: 26,
+        topicId: 26,
+        title: "X-Ray Colours – Organic / Inorganic / Mixed",
+        body:
+" X-ray colour codes:\n- Organic material (once living) → ORANGE (most explosives and many plastics).\n- Inorganic material (never living) → BLUE (metals, minerals).\n- Mixed material → GREEN (combination of organic and inorganic).\n\nMix of orange and blue shows as green.\nMost homemade explosives appear as green on X-ray due to mixed components."
+      },
+      {
+        id: 27,
+        topicId: 27,
+        title: "Density – Bright vs Light",
+        body:
+" On X-ray images:\n- Brighter colour = higher material density.\n- Lighter / paler colour = lower material density.\n\nDense items may hide other objects behind them, so be extra careful around bright, solid blocks."
+      },
+      {
+        id: 28,
+        topicId: 28,
+        title: "EDS – Explosive Detection System",
+        body:
+" EDS stands for Explosive Detection System.\n\n- System-generated alerts, typically shown as a red square.\n- Highlights areas where the system suspects explosives.\n\nOperators must review these areas carefully and follow SOP for alarms."
+      },
+      {
+        id: 29,
+        topicId: 29,
+        title: "Obvious Threat Button",
+        body:
+" Obvious threat function:\n- Yellow button at the top of the screen.\n- Used only for obvious firearm or IED threats.\n\nIt quickly flags serious threats and triggers immediate security responses."
+      },
+      {
+        id: 30,
+        topicId: 30,
+        title: "Shield / Density Alarm",
+        body:
+" Shield / density alarm:\n- Automatic density alarm generated by the system.\n- Depicted by a yellow square.\n\nIndicates very dense areas that may conceal items. Always investigate these regions carefully."
+      },
+      {
+        id: 31,
+        topicId: 31,
+        title: "Operator Alarms (HSO – Purple/Pink)",
+        body:
+" Operator alarms (HSO):\n- Purple: drawn by the operator when first identifying a suspicious area (usually after slicing the image).\n- Pink: when the operator confirms the threat.\n\nThese alarms track operator decisions and support auditing and training."
+      },
+      {
+        id: 32,
+        topicId: 32,
+        title: "CIP – Centralised Image Processing",
+        body:
+" CIP stands for Centralised Image Processing.\n\n- Operators can receive images from multiple lanes.\n- Helps balance workload and improve consistency.\n- Screening can be done remotely from the physical lane.\n\nCIP improves throughput while keeping image quality and decision-making centralised."
+      },
+      {
+        id: 33,
+        topicId: 33,
+        title: "TIP – Threat Image Projection",
+        body:
+" TIP: Threat Image Projection.\n\n- System injects fake training images into live X-ray streams.\n- Used to monitor operator performance.\n- Only one category at a time (e.g. devices, firearms, sharps, other).\n\nOperators must treat all images seriously, as they may be real or TIP."
+      },
+      {
+        id: 34,
+        topicId: 34,
+        title: "TIP Pop-up Messages",
+        body:
+" After a TIP test, pop-up messages show:\n- Green: Correctly detected the threat.\n- Red: Incorrect detection or timed out.\n- Yellow: The image is real – log out and speak to the Security Manager.\n\nThese messages are important for feedback and training."
       }
     ];
 
+    // ===== Flashcards =====
     const flashcards = [
       {
         id: 1,
-        topicId: 1,
-        question: "Name the three main bodies in UK aviation governance.",
-        answer: "DfT (policy), CAA (regulator), and Heathrow Airport Ltd / HAL (operator)."
+        topicId: 2,
+        question: "Who sets strategic aviation policy and is accountable to Parliament?",
+        answer: "The Department for Transport (DfT)."
       },
       {
         id: 2,
-        topicId: 1,
-        question: "Who is accountable to Parliament for aviation strategy?",
-        answer: "The Secretary of State for Transport, through the Department for Transport (DfT)."
-      },
-      {
-        id: 3,
-        topicId: 2,
-        question: "What is the primary duty of the CAA?",
+        topicId: 3,
+        question: "What is the primary duty of the Civil Aviation Authority (CAA)?",
         answer: "To protect the interests of consumers/passengers while regulating safety, security and economics."
       },
       {
+        id: 3,
+        topicId: 4,
+        question: "What is Heathrow Airport Ltd’s (HAL) main role?",
+        answer: "To own and operate the airport infrastructure and implement security measures on site."
+      },
+      {
         id: 4,
-        topicId: 3,
-        question: "Which body directly implements noise insulation schemes?",
-        answer: "Heathrow Airport Ltd (the operator) implements schemes such as noise insulation."
+        topicId: 5,
+        question: "In one sentence, describe the roles of DfT, CAA and Heathrow.",
+        answer: "DfT sets policy, CAA regulates and oversees, and Heathrow delivers operations and implements security."
+      },
+      {
+        id: 5,
+        topicId: 6,
+        question: "Which three elements combine to form a threat?",
+        answer: "Motivation, Intent and Capability."
+      },
+      {
+        id: 6,
+        topicId: 7,
+        question: "What is the current UK threat level and what does it mean?",
+        answer: "Substantial – an attack is likely."
+      },
+      {
+        id: 7,
+        topicId: 8,
+        question: "Name three possible sources of threats in aviation.",
+        answer: "Any three of: terrorists, insiders, unruly persons, refugees, criminals, radicalised persons."
+      },
+      {
+        id: 8,
+        topicId: 9,
+        question: "What does MTA stand for?",
+        answer: "Marauding terrorist attack."
+      },
+      {
+        id: 9,
+        topicId: 11,
+        question: "What do PB, VB and DB stand for?",
+        answer: "Person-borne, Vehicle-borne and Drone-borne devices."
+      },
+      {
+        id: 10,
+        topicId: 12,
+        question: "What should you do if you suspect your ID or keys are compromised?",
+        answer: "Immediately inform the Security Manager (SM)."
+      },
+      {
+        id: 11,
+        topicId: 14,
+        question: "From what blade length are scissors and sharp blades usually prohibited in the cabin?",
+        answer: "6 cm or more from the pivot / blade length of 6 cm or more."
+      },
+      {
+        id: 12,
+        topicId: 17,
+        question: "How is a firearm (FA) defined in aviation security?",
+        answer: "Any device that allows launching a projectile, solid or liquid, even if it only appears capable."
+      },
+      {
+        id: 13,
+        topicId: 18,
+        question: "List two suspicious signs of concealment in baggage.",
+        answer: "Any two of: unusual location, weight/balance, extra stitching, extra zips, extra pockets."
+      },
+      {
+        id: 14,
+        topicId: 23,
+        question: "What does BCPP stand for in ammunition components?",
+        answer: "Bullet, Case, Primer, Powder."
+      },
+      {
+        id: 15,
+        topicId: 26,
+        question: "On X-ray, which colour usually represents organic material?",
+        answer: "Orange."
+      },
+      {
+        id: 16,
+        topicId: 26,
+        question: "Which colour often represents homemade explosives on X-ray and why?",
+        answer: "Green, because they are a mix of organic (orange) and inorganic (blue) materials."
+      },
+      {
+        id: 17,
+        topicId: 28,
+        question: "What does a red square generated by the system usually indicate?",
+        answer: "An EDS (Explosive Detection System) alert."
+      },
+      {
+        id: 18,
+        topicId: 33,
+        question: "What is TIP and why is it used?",
+        answer: "Threat Image Projection; fake threat images used in X-ray streams to test operator performance."
       }
     ];
 
+    // ===== Quiz questions =====
     const questions = [
       {
         id: 1,
-        topicId: 1,
-        text: "Which body sets strategic aviation policy?",
+        topicId: 2,
+        text: "Which body sets strategic aviation policy and is accountable to Parliament?",
         options: {
           A: "Civil Aviation Authority (CAA)",
           B: "Heathrow Airport Ltd (HAL)",
           C: "Department for Transport (DfT)",
-          D: "Airlines"
+          D: "Local council"
         },
         correct: "C"
       },
       {
         id: 2,
-        topicId: 1,
-        text: "What is the main role of HAL in the tripartite structure?",
-        options: {
-          A: "Set national policy",
-          B: "Regulate airspace safety",
-          C: "Own and operate airport infrastructure",
-          D: "Approve legislation in Parliament"
-        },
-        correct: "C"
-      },
-      {
-        id: 3,
-        topicId: 2,
+        topicId: 3,
         text: "The CAA’s primary duty is to protect the interests of:",
         options: {
           A: "Shareholders",
-          B: "Airlines",
-          C: "Consumers/passengers",
-          D: "Airport staff"
+          B: "Consumers/passengers",
+          C: "Airlines only",
+          D: "Airport staff only"
+        },
+        correct: "B"
+      },
+      {
+        id: 3,
+        topicId: 4,
+        text: "What is Heathrow Airport Ltd’s core function?",
+        options: {
+          A: "Set national threat levels",
+          B: "Own and operate airport infrastructure",
+          C: "Write aviation security laws",
+          D: "Approve pilot licences"
+        },
+        correct: "B"
+      },
+      {
+        id: 4,
+        topicId: 6,
+        text: "Which three elements combine to form a threat?",
+        options: {
+          A: "Motive, Weapon, Escape plan",
+          B: "Motivation, Intent, Capability",
+          C: "Intent, Equipment, Timing",
+          D: "Fear, Panic, Confusion"
+        },
+        correct: "B"
+      },
+      {
+        id: 5,
+        topicId: 7,
+        text: "“Substantial” threat level means an attack is:",
+        options: {
+          A: "Highly unlikely",
+          B: "Possible but not likely",
+          C: "Likely",
+          D: "Highly likely in the near future"
         },
         correct: "C"
       },
       {
-        id: 4,
-        topicId: 3,
-        text: "Who sets national legal obligations on carbon and noise?",
+        id: 6,
+        topicId: 8,
+        text: "Which of these is NOT typically listed as a threat source?",
         options: {
-          A: "CAA",
-          B: "Heathrow Airport Ltd",
-          C: "Local councils",
-          D: "DfT / Government"
+          A: "Terrorists",
+          B: "Insiders",
+          C: "Unruly persons",
+          D: "Ground handlers who follow all rules"
         },
         correct: "D"
+      },
+      {
+        id: 7,
+        topicId: 9,
+        text: "MTA in aviation security stands for:",
+        options: {
+          A: "Main Terminal Area",
+          B: "Marauding Terrorist Attack",
+          C: "Maximum Threat Alert",
+          D: "Multi-Target Action"
+        },
+        correct: "B"
+      },
+      {
+        id: 8,
+        topicId: 11,
+        text: "PB, VB, DB refer to:",
+        options: {
+          A: "Passenger, Baggage, Document checks",
+          B: "Person-borne, Vehicle-borne, Drone-borne devices",
+          C: "Pilot, Vehicle, Drone licences",
+          D: "None of the above"
+        },
+        correct: "B"
+      },
+      {
+        id: 9,
+        topicId: 14,
+        text: "Which item is normally prohibited in the cabin?",
+        options: {
+          A: "Scissors with 2 cm blades",
+          B: "Scissors with 7 cm blades from pivot",
+          C: "Plastic spoon",
+          D: "Soft toy"
+        },
+        correct: "B"
+      },
+      {
+        id: 10,
+        topicId: 15,
+        text: "Undeclared firearms and ammunition are:",
+        options: {
+          A: "Allowed in cabin only",
+          B: "Allowed in hold only",
+          C: "Prohibited in cabin and hold",
+          D: "Allowed if packed tightly"
+        },
+        correct: "C"
+      },
+      {
+        id: 11,
+        topicId: 17,
+        text: "A firearm is treated as such even if:",
+        options: {
+          A: "It is painted bright colours",
+          B: "It appears capable of firing a projectile",
+          C: "It is carried in the hold only",
+          D: "It is declared at check-in"
+        },
+        correct: "B"
+      },
+      {
+        id: 12,
+        topicId: 18,
+        text: "Which of these may indicate concealment?",
+        options: {
+          A: "Balanced weight and standard stitching",
+          B: "Extra stitching and extra pockets",
+          C: "Light bag with normal zips",
+          D: "Brand new bag with tags"
+        },
+        correct: "B"
+      },
+      {
+        id: 13,
+        topicId: 23,
+        text: "Which is NOT one of the basic ammunition components?",
+        options: {
+          A: "Bullet",
+          B: "Case",
+          C: "Primer",
+          D: "Battery"
+        },
+        correct: "D"
+      },
+      {
+        id: 14,
+        topicId: 26,
+        text: "On X-ray, inorganic materials like metal usually appear:",
+        options: {
+          A: "Orange",
+          B: "Blue",
+          C: "Green",
+          D: "Purple"
+        },
+        correct: "B"
+      },
+      {
+        id: 15,
+        topicId: 28,
+        text: "An EDS alert on screen is typically shown as:",
+        options: {
+          A: "Orange circle",
+          B: "Yellow square",
+          C: "Red square",
+          D: "Purple triangle"
+        },
+        correct: "C"
+      },
+      {
+        id: 16,
+        topicId: 33,
+        text: "TIP images are used to:",
+        options: {
+          A: "Decorate the X-ray display",
+          B: "Train and test operators with fake threats",
+          C: "Calibrate conveyor speed",
+          D: "Check printer ink levels"
+        },
+        correct: "B"
       }
     ];
 
@@ -582,16 +1041,14 @@
       topicListEl.innerHTML = "";
       topics.forEach((t) => {
         const li = document.createElement("li");
-        li.className =
-          "list-item" + (t.id === selectedTopicId ? " active" : "");
+        li.className = "list-item" + (t.id === selectedTopicId ? " active" : "");
         li.textContent = t.name;
         li.addEventListener("click", () => {
           selectedTopicId = t.id;
           selectedContentId = null;
           renderTopics();
           renderContentList();
-          contentBodyEl.textContent =
-            "Select an item under this topic to see details.";
+          contentBodyEl.textContent = "Select an item under this topic to see details.";
         });
         topicListEl.appendChild(li);
       });
@@ -602,8 +1059,7 @@
       const filtered = contentItems.filter((c) => c.topicId === selectedTopicId);
       filtered.forEach((item) => {
         const li = document.createElement("li");
-        li.className =
-          "list-item" + (item.id === selectedContentId ? " active" : "");
+        li.className = "list-item" + (item.id === selectedContentId ? " active" : "");
         const titleSpan = document.createElement("span");
         titleSpan.textContent = item.title;
         li.appendChild(titleSpan);
@@ -646,9 +1102,9 @@
       }
       const card = currentFlashcards[flashIndex];
       flashcardEl.textContent = showAnswer ? card.answer : card.question;
-      flashMetaEl.textContent = `Card ${flashIndex + 1} of ${
-        currentFlashcards.length
-      } • ${showAnswer ? "Answer" : "Question"}`;
+      flashMetaEl.textContent = `Card ${flashIndex + 1} of ${currentFlashcards.length} • ${
+        showAnswer ? "Answer" : "Question"
+      }`;
       toggleAnswerBtn.textContent = showAnswer ? "Show Question" : "Show Answer";
     }
 
@@ -730,7 +1186,9 @@
 
     function renderQuizQuestion() {
       const q = currentQuizQuestions[quizIndex];
-      quizProgressEl.textContent = `Question ${quizIndex + 1} of ${currentQuizQuestions.length}`;
+      quizProgressEl.textContent = `Question ${quizIndex + 1} of ${
+        currentQuizQuestions.length
+      }`;
       quizQuestionTextEl.textContent = q.text;
       quizOptionsEl.innerHTML = "";
       selectedOption = null;
@@ -750,11 +1208,8 @@
         quizOptionsEl.appendChild(btn);
       });
 
-      if (quizIndex === currentQuizQuestions.length - 1) {
-        nextQuestionBtn.textContent = "Finish";
-      } else {
-        nextQuestionBtn.textContent = "Next";
-      }
+      nextQuestionBtn.textContent =
+        quizIndex === currentQuizQuestions.length - 1 ? "Finish" : "Next";
     }
 
     nextQuestionBtn.addEventListener("click", () => {
@@ -769,7 +1224,6 @@
         quizScore++;
       }
       quizResultEl.textContent = "";
-      // Next or finish
       if (quizIndex < currentQuizQuestions.length - 1) {
         quizIndex++;
         renderQuizQuestion();
