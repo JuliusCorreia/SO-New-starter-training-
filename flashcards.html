@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Aviation Security – Flashcards</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-grad: radial-gradient(circle at top, #1e293b 0, #020617 55%);
+      --card: #020617;
+      --accent: #0ea5e9;
+      --accent-strong: #0284c7;
+      --accent-soft: rgba(14, 165, 233, 0.12);
+      --border-subtle: rgba(148, 163, 184, 0.25);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --radius-lg: 22px;
+      --radius-md: 12px;
+      --shadow-soft: 0 22px 50px rgba(15, 23, 42, 0.9);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: var(--bg-grad);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .frame {
+      width: 100%;
+      max-width: 720px;
+      border-radius: 28px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top left, #020617 0, #020617 60%);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 18px 18px;
+      backdrop-filter: blur(22px);
+    }
+
+    .frame-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .row-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .row-top label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    select {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      padding: 6px 10px;
+      font-size: 12px;
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-main);
+      outline: none;
+    }
+
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(14, 165, 233, 0.45);
+    }
+
+    .flash-card {
+      position: relative;
+      margin-top: 8px;
+      border-radius: var(--radius-lg);
+      padding: 22px 18px;
+      background: radial-gradient(circle at top left, #0ea5e9 0, #020617 60%);
+      color: #f9fafb;
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 500;
+      overflow: hidden;
+    }
+
+    .flash-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(15, 23, 42, 0.4);
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+    }
+
+    .flash-label {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      opacity: 0.8;
+    }
+
+    .flash-meta {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .controls {
+      margin-top: 10px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s, color 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #020617;
+      border-color: rgba(15, 23, 42, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-strong);
+    }
+
+    .btn-ghost {
+      background: rgba(15, 23, 42, 0.92);
+      border-color: rgba(148, 163, 184, 0.5);
+      color: var(--text-muted);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(15, 23, 42, 1);
+      color: #e5e7eb;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .hint {
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    @media (max-width: 640px) {
+      .frame {
+        padding: 14px 12px 16px;
+        border-radius: 22px;
+      }
+      .flash-card {
+        padding: 18px 14px;
+        min-height: 160px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <div class="frame-header">
+      <div>
+        <div class="title">Flashcards – Aviation Security</div>
+        <div class="subtitle">Tap through each topic: Question ⇄ Answer.</div>
+      </div>
+      <div id="topicBadge" class="badge">Topic: —</div>
+    </div>
+
+    <div class="row-top">
+      <div>
+        <label for="topicSelect">Topic</label><br />
+        <select id="topicSelect"></select>
+      </div>
+      <div>
+        <label>Side</label><br />
+        <span id="sideLabel" class="badge">Question</span>
+      </div>
+    </div>
+
+    <div class="flash-card" id="card">
+      <span class="flash-label" id="topicShort">TOPIC</span>
+      <div id="cardText">Select a topic to begin.</div>
+    </div>
+
+    <div class="flash-meta">
+      <span id="counter">Card 0 of 0</span>
+      <span id="infoText"></span>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-ghost" id="prevBtn">Prev</button>
+      <button class="btn btn-primary" id="toggleBtn">Show Answer</button>
+      <button class="btn btn-ghost" id="nextBtn">Next</button>
+    </div>
+
+    <div class="hint">
+      Tip: Use this in its own tab, or embed it into another page with an iframe.
+    </div>
+  </div>
+
+  <!-- shared data -->
+  <script src="data.js"></script>
+
+  <script>
+    // expects `topics` and `flashcards` from data.js
+
+    const topicSelect = document.getElementById("topicSelect");
+    const topicBadge = document.getElementById("topicBadge");
+    const topicShortEl = document.getElementById("topicShort");
+    const cardText = document.getElementById("cardText");
+    const sideLabel = document.getElementById("sideLabel");
+    const counterEl = document.getElementById("counter");
+    const infoText = document.getElementById("infoText");
+
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const toggleBtn = document.getElementById("toggleBtn");
+
+    let currentTopicId = null;
+    let currentFlashcards = [];
+    let index = 0;
+    let showAnswer = false;
+
+    function shortTagFromName(name) {
+      if (!name) return "TOPIC";
+      if (name.includes("DfT")) return "DfT";
+      if (name.includes("CAA")) return "CAA";
+      if (name.includes("Heathrow")) return "Heathrow";
+      if (name.includes("Threat")) return "Threat";
+      if (name.includes("X‑Ray") || name.includes("X-Ray")) return "X‑RAY";
+      return name.split(" ")[0].toUpperCase();
+    }
+
+    function buildTopicSelect() {
+      // unique topicIds from flashcards
+      const ids = Array.from(new Set(flashcards.map(f => f.topicId)));
+      topicSelect.innerHTML = "";
+      ids.forEach(id => {
+        const topic = topics.find(t => t.id === id);
+        const opt = document.createElement("option");
+        opt.value = id;
+        opt.textContent = topic ? topic.name : `Topic ${id}`;
+        topicSelect.appendChild(opt);
+      });
+
+      if (ids.length > 0) {
+        currentTopicId = ids[0];
+        topicSelect.value = String(currentTopicId);
+        loadFlashcardsForTopic(currentTopicId);
+      } else {
+        cardText.textContent = "No flashcards defined yet.";
+      }
+    }
+
+    function loadFlashcardsForTopic(topicId) {
+      currentFlashcards = flashcards.filter(f => f.topicId === topicId);
+      index = 0;
+      showAnswer = false;
+
+      const topic = topics.find(t => t.id === topicId);
+      topicBadge.textContent = `Topic: ${topic ? topic.name : topicId}`;
+      topicShortEl.textContent = shortTagFromName(topic?.name || "");
+
+      renderCard();
+    }
+
+    function renderCard() {
+      if (!currentFlashcards.length) {
+        cardText.textContent = "No flashcards for this topic yet.";
+        counterEl.textContent = "Card 0 of 0";
+        sideLabel.textContent = "Question";
+        toggleBtn.textContent = "Show Answer";
+        infoText.textContent = "";
+        return;
+      }
+
+      const card = currentFlashcards[index];
+      cardText.textContent = showAnswer ? card.a : card.q;
+      counterEl.textContent = `Card ${index + 1} of ${currentFlashcards.length}`;
+      sideLabel.textContent = showAnswer ? "Answer" : "Question";
+      toggleBtn.textContent = showAnswer ? "Show Question" : "Show Answer";
+      infoText.textContent = "";
+    }
+
+    topicSelect.addEventListener("change", () => {
+      currentTopicId = Number(topicSelect.value);
+      loadFlashcardsForTopic(currentTopicId);
+    });
+
+    prevBtn.addEventListener("click", () => {
+      if (!currentFlashcards.length) return;
+      index = (index - 1 + currentFlashcards.length) % currentFlashcards.length;
+      showAnswer = false;
+      renderCard();
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (!currentFlashcards.length) return;
+      index = (index + 1) % currentFlashcards.length;
+      showAnswer = false;
+      renderCard();
+    });
+
+    toggleBtn.addEventListener("click", () => {
+      if (!currentFlashcards.length) return;
+      showAnswer = !showAnswer;
+      renderCard();
+    });
+
+    function init() {
+      buildTopicSelect();
+    }
+
+    init();
+  </script>
+</body>
+</html>
