@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Aviation Security – Training Notes</title>
+  <title>Aviation Security – Interactive Notes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -166,6 +166,7 @@
       display: grid;
       grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
       gap: 20px;
+      min-height: 520px;
     }
 
     @media (max-width: 880px) {
@@ -181,7 +182,7 @@
       }
     }
 
-    /* Sidebar */
+    /* Sidebar as interactive nav */
 
     .side-panel {
       background: radial-gradient(circle at top, rgba(255,255,255,0.04) 0, transparent 55%),
@@ -207,6 +208,9 @@
     .side-panel-inner {
       position: relative;
       z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
     .side-heading {
@@ -250,6 +254,8 @@
       gap: 8px;
       border-bottom: 1px solid rgba(255,255,255,0.03);
       backdrop-filter: blur(4px);
+      cursor: pointer;
+      transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
     }
 
     .topic-item:last-child {
@@ -261,14 +267,23 @@
       height: 6px;
       border-radius: 999px;
       background: rgba(255,255,255,0.32);
+      flex-shrink: 0;
     }
 
-    .topic-item.primary {
-      background: radial-gradient(circle at left, rgba(79,139,255,0.2) 0, transparent 60%);
+    .topic-item:hover {
+      background: radial-gradient(circle at left, rgba(79,139,255,0.2) 0, transparent 70%);
       color: #e6ecff;
+      transform: translateX(1px);
     }
 
-    .topic-item.primary .topic-bullet {
+    .topic-item.active {
+      background: radial-gradient(circle at left, rgba(79,139,255,0.22) 0, transparent 60%);
+      color: #eaf0ff;
+      border-left: 2px solid rgba(79,139,255,0.9);
+      padding-left: 12px;
+    }
+
+    .topic-item.active .topic-bullet {
       background: var(--accent);
       box-shadow: 0 0 0 6px rgba(79,139,255,0.2);
     }
@@ -289,12 +304,11 @@
       background: rgba(7,10,20,0.9);
     }
 
-    /* Main content */
+    /* Main content panel */
 
     .content-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+      position: relative;
+      min-height: 420px;
     }
 
     section.card {
@@ -304,6 +318,17 @@
       padding: 16px 16px 14px;
       border: 1px solid rgba(255,255,255,0.04);
       box-shadow: 0 14px 32px rgba(0,0,0,0.75);
+      display: none;
+      animation: fadeIn 160ms ease-out;
+    }
+
+    section.card.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .card-header {
@@ -524,9 +549,9 @@
           <div class="brand-text">
             <h1>
               Aviation Security
-              <span class="badge">Training Deck</span>
+              <span class="badge">Interactive Notes</span>
             </h1>
-            <p>Condensed notes, mnemonics & exam‑ready reference</p>
+            <p>Click a topic on the left to view content on the right.</p>
           </div>
         </div>
         <div class="header-meta">
@@ -545,34 +570,60 @@
         <aside class="side-panel" aria-label="Topics overview">
           <div class="side-panel-inner">
             <h2 class="side-heading">Topics map</h2>
-            <ul class="topic-list">
-              <li class="topic-item primary"><span class="topic-bullet"></span>Aviation Security (overall)</li>
-              <li class="topic-item"><span class="topic-bullet"></span>DfT / CAA / Heathrow – Basics</li>
-              <li class="topic-item"><span class="topic-bullet"></span>Threat & Threat Levels (MITC)</li>
-              <li class="topic-item"><span class="topic-bullet"></span>Sources & Types of Attack</li>
-              <li class="topic-item"><span class="topic-bullet"></span>Locations & Device Types</li>
-              <li class="topic-item"><span class="topic-bullet"></span>Behaviour – Golden Rules</li>
-              <li class="topic-item"><span class="topic-bullet"></span>RFX, X‑ray & CT</li>
-              <li class="topic-item"><span class="topic-bullet"></span>Prohibited Items & Law</li>
-              <li class="topic-item"><span class="topic-bullet"></span>Firearms & Ammunition</li>
-              <li class="topic-item"><span class="topic-bullet"></span>IED / IID & Explosives</li>
-              <li class="topic-item"><span class="topic-bullet"></span>X‑ray Colours & Density</li>
-              <li class="topic-item"><span class="topic-bullet"></span>EDS, Alarms, CIP, TIP</li>
+            <ul class="topic-list" id="topicList">
+              <li class="topic-item active" data-target="card-dft">
+                <span class="topic-bullet"></span>
+                DfT / CAA / Heathrow – Basics
+              </li>
+              <li class="topic-item" data-target="card-threat-mitc">
+                <span class="topic-bullet"></span>
+                Threat & Threat Levels (MITC)
+              </li>
+              <li class="topic-item" data-target="card-sources-attack">
+                <span class="topic-bullet"></span>
+                Threat Sources & Attack Types
+              </li>
+              <li class="topic-item" data-target="card-locations-devices">
+                <span class="topic-bullet"></span>
+                Locations & Device Types
+              </li>
+              <li class="topic-item" data-target="card-behaviour">
+                <span class="topic-bullet"></span>
+                Behaviour – Security Golden Rules
+              </li>
+              <li class="topic-item" data-target="card-prohibited">
+                <span class="topic-bullet"></span>
+                RFX & Prohibited Articles
+              </li>
+              <li class="topic-item" data-target="card-firearms-ammunition">
+                <span class="topic-bullet"></span>
+                Firearms & Ammunition
+              </li>
+              <li class="topic-item" data-target="card-ied-iid">
+                <span class="topic-bullet"></span>
+                IED / IID & Explosives
+              </li>
+              <li class="topic-item" data-target="card-suspicious-handling">
+                <span class="topic-bullet"></span>
+                Suspicious Signs & Handling
+              </li>
+              <li class="topic-item" data-target="card-imaging-systems">
+                <span class="topic-bullet"></span>
+                CT, X‑ray, Colours & Alarms
+              </li>
             </ul>
 
             <div class="chip-row">
-              <span class="chip">Flashcard‑friendly</span>
-              <span class="chip">Smart‑art flows</span>
-              <span class="chip">Exam hints</span>
+              <span class="chip">Click to switch topic</span>
+              <span class="chip">One panel at a time</span>
             </div>
           </div>
         </aside>
 
-        <!-- Main content -->
+        <!-- Main content: one card visible at a time -->
         <div class="content-panel">
-
           <!-- DfT / CAA / Heathrow -->
-          <section class="card" id="dft-caa-heathrow">
+          <section class="card active" id="card-dft">
             <div class="card-header">
               <div class="card-title">
                 Roles: DfT, CAA & Heathrow
@@ -630,7 +681,7 @@
                       <td>Core focus</td>
                       <td>Policy & law</td>
                       <td>Oversight & regulation</td>
-                      <<td>Delivery & operations</td>
+                      <td>Delivery & operations</td>
                     </tr>
                     <tr>
                       <td>Security</td>
@@ -650,7 +701,7 @@
           </section>
 
           <!-- Threat & levels -->
-          <section class="card" id="threat-mitc">
+          <section class="card" id="card-threat-mitc">
             <div class="card-header">
               <div class="card-title">
                 Threat & MITC
@@ -717,7 +768,7 @@
           </section>
 
           <!-- Threat sources & types -->
-          <section class="card" id="sources-attack">
+          <section class="card" id="card-sources-attack">
             <div class="card-header">
               <div class="card-title">
                 Threat Sources & Attack Types
@@ -803,7 +854,7 @@
           </section>
 
           <!-- Locations & device types -->
-          <section class="card" id="locations-devices">
+          <section class="card" id="card-locations-devices">
             <div class="card-header">
               <div class="card-title">
                 Locations & Device Types
@@ -885,7 +936,7 @@
           </section>
 
           <!-- Behaviour / Golden rules -->
-          <section class="card" id="behaviour">
+          <section class="card" id="card-behaviour">
             <div class="card-header">
               <div class="card-title">
                 Security Behaviour – Golden Rules
@@ -942,7 +993,7 @@
           </section>
 
           <!-- RFX, prohibited items, law -->
-          <section class="card" id="prohibited">
+          <section class="card" id="card-prohibited">
             <div class="card-header">
               <div class="card-title">
                 RFX & Prohibited Articles
@@ -1030,7 +1081,7 @@
           </section>
 
           <!-- Firearms & ammo -->
-          <section class="card" id="firearms-ammunition">
+          <section class="card" id="card-firearms-ammunition">
             <div class="card-header">
               <div class="card-title">
                 Firearms & Ammunition
@@ -1148,7 +1199,7 @@
           </section>
 
           <!-- IED / IID & explosives -->
-          <section class="card" id="ied-iid">
+          <section class="card" id="card-ied-iid">
             <div class="card-header">
               <div class="card-title">
                 IED, IID & Explosive Types
@@ -1259,7 +1310,7 @@
           </section>
 
           <!-- Suspicious signs & handling -->
-          <section class="card" id="suspicious-handling">
+          <section class="card" id="card-suspicious-handling">
             <div class="card-header">
               <div class="card-title">
                 Suspicious Signs & Handling
@@ -1334,7 +1385,7 @@
           </section>
 
           <!-- CT, X-ray, colours, density, alarms, CIP, TIP -->
-          <section class="card" id="imaging-systems">
+          <section class="card" id="card-imaging-systems">
             <div class="card-header">
               <div class="card-title">
                 CT, X‑ray, Colours & Alarms
@@ -1512,5 +1563,31 @@
       </main>
     </div>
   </div>
+
+  <script>
+    // Simple vanilla JS to switch cards when clicking left topics
+    (function () {
+      const topicItems = document.querySelectorAll('.topic-item');
+      const cards = document.querySelectorAll('.card');
+
+      function activate(targetId) {
+        cards.forEach(card => {
+          card.classList.toggle('active', card.id === targetId);
+        });
+        topicItems.forEach(item => {
+          item.classList.toggle('active', item.getAttribute('data-target') === targetId);
+        });
+      }
+
+      topicItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const targetId = item.getAttribute('data-target');
+          if (targetId) {
+            activate(targetId);
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
