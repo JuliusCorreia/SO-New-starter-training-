@@ -320,9 +320,54 @@
       style="width:100%;height:420px;border:none;border-radius:18px;overflow:hidden;background:transparent;"
     ></iframe>
   </section>
-</main>
+        <main class="main">
+  <section class="card">
+    <div class="card-header">
+      <div>
+        <div id="contentTitle" class="card-title">Select a topic</div>
+        <div id="contentSubtitle" class="card-subtitle">
+          Click a topic on the left to see its full content, exactly as in your notes.
+        </div>
+      </div>
+      <div id="contentTag" class="pill">—</div>
+    </div>
+    <div id="contentBody" class="content-body">
+      <p>This page is a clean reader for your Aviation Security topics.</p>
+      <div class="smart-note">
+        <strong>Tip:</strong> Use this page for reading/revision, then open Flashcards and Mock Tests using the buttons in the sidebar.
+      </div>
+    </div>
+  </section>
 
-    </main>
+  <!-- Embedded flashcards panel -->
+  <section class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Flashcards</div>
+        <div class="card-subtitle">Quick Q&A view (embedded from flashcards.html).</div>
+      </div>
+    </div>
+    <iframe
+      src="flashcards.html"
+      style="width:100%;height:420px;border:none;border-radius:18px;overflow:hidden;background:transparent;"
+    ></iframe>
+  </section>
+
+  <!-- Embedded mock tests panel -->
+  <section class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Mock Tests</div>
+        <div class="card-subtitle">MCQ practice (embedded from mocktest.html).</div>
+      </div>
+    </div>
+    <iframe
+      src="mocktest.html"
+      style="width:100%;height:460px;border:none;border-radius:18px;overflow:hidden;background:transparent;"
+    ></iframe>
+  </section>
+
+ </main>
   </div>
 
   <!-- Shared data (topics + content) -->
