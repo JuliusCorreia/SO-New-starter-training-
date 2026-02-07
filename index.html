@@ -1,1376 +1,900 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Aviation Security Learning Hub</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --bg: #0b0c10;
-      --bg-elevated: #111827;
-      --card: #020617;
-      --accent: #0ea5e9;
-      --accent-soft: rgba(14, 165, 233, 0.15);
-      --accent-strong: #0284c7;
-      --border-subtle: rgba(148, 163, 184, 0.25);
-      --text-main: #e5e7eb;
-      --text-muted: #9ca3af;
-      --danger: #f97373;
-      --radius-lg: 18px;
-      --radius-md: 12px;
-      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.75);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1e293b 0, #020617 55%);
-      color: var(--text-main);
-      min-height: 100vh;
-    }
-
-    .app-shell {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 16px;
-      display: grid;
-      grid-template-columns: 260px minmax(0, 1fr);
-      gap: 16px;
-    }
-
-    header {
-      grid-column: 1 / -1;
-      padding: 8px 4px 4px;
-    }
-
-    header h1 {
-      font-size: 26px;
-      font-weight: 650;
-      letter-spacing: -0.03em;
-    }
-
-    header p {
-      margin-top: 4px;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    /* Sidebar */
-    .sidebar {
-      background: rgba(15, 23, 42, 0.9);
-      border-radius: var(--radius-lg);
-      padding: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      backdrop-filter: blur(18px);
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.7);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .section-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--text-muted);
-      margin: 4px 4px 4px;
-    }
-
-    .topic-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      border-radius: var(--radius-md);
-      background: rgba(15, 23, 42, 0.75);
-      border: 1px solid rgba(148, 163, 184, 0.15);
-      max-height: 520px;
-      overflow-y: auto;
-    }
-
-    .topic-item {
-      padding: 7px 10px;
-      font-size: 13px;
-      color: var(--text-muted);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s, transform 0.1s;
-    }
-
-    .topic-item span {
-      flex: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .topic-item small {
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      margin-left: 8px;
-    }
-
-    .topic-item:hover {
-      background: rgba(30, 64, 175, 0.45);
-      color: #e5e7eb;
-    }
-
-    .topic-item.active {
-      background: linear-gradient(90deg, var(--accent), var(--accent-strong));
-      color: #f9fafb;
-      transform: translateX(1px);
-    }
-
-    .sidebar-tabs {
-      display: flex;
-      margin-top: 8px;
-      background: rgba(15, 23, 42, 0.75);
-      border-radius: 999px;
-      padding: 3px;
-    }
-
-    .sidebar-tab-btn {
-      flex: 1;
-      border: none;
-      border-radius: 999px;
-      padding: 6px 8px;
-      font-size: 12px;
-      cursor: pointer;
-      background: transparent;
-      color: var(--text-muted);
-      transition: background 0.15s, color 0.15s;
-    }
-
-    .sidebar-tab-btn.active {
-      background: rgba(15, 23, 42, 0.95);
-      color: #e5e7eb;
-    }
-
-    /* Main area */
-    .main {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .mode-tabs {
-      display: inline-flex;
-      align-self: flex-end;
-      background: rgba(15, 23, 42, 0.75);
-      border-radius: 999px;
-      padding: 3px;
-      border: 1px solid rgba(148, 163, 184, 0.25);
-    }
-
-    .mode-btn {
-      border: none;
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
-      cursor: pointer;
-      background: transparent;
-      color: var(--text-muted);
-      transition: background 0.15s, color 0.15s;
-    }
-
-    .mode-btn.active {
-      background: var(--accent-soft);
-      color: #e5e7eb;
-    }
-
-    .panel {
-      background: radial-gradient(circle at top left, #0b1120 0, #020617 62%);
-      border-radius: var(--radius-lg);
-      padding: 16px 16px 18px;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      box-shadow: var(--shadow-soft);
-      min-height: 260px;
-    }
-
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 12px;
-    }
-
-    .panel-title {
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-
-    .panel-subtitle {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .pill {
-      padding: 2px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .content-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 2fr);
-      gap: 12px;
-    }
-
-    .content-body {
-      font-size: 14px;
-      color: #e5e7eb;
-      line-height: 1.7;
-    }
-
-    .content-body h3 {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .content-body p {
-      margin-bottom: 8px;
-    }
-
-    .content-body ul {
-      margin-left: 14px;
-      margin-bottom: 8px;
-    }
-
-    .content-body li {
-      margin-bottom: 3px;
-    }
-
-    .smart-card {
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: var(--radius-md);
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      font-size: 13px;
-    }
-
-    .smart-card-title {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--accent);
-      margin-bottom: 4px;
-    }
-
-    .badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 6px;
-    }
-
-    .badge {
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .badge-strong {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: rgba(14, 165, 233, 0.08);
-    }
-
-    .tag-important {
-      color: #f97316;
-      font-weight: 500;
-    }
-
-    /* Flashcards */
-    .flash-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .flash-top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    select {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      padding: 6px 10px;
-      font-size: 12px;
-      background: rgba(15, 23, 42, 0.9);
-      color: var(--text-main);
-      outline: none;
-    }
-
-    select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(14, 165, 233, 0.45);
-    }
-
-    .flash-card {
-      margin-top: 6px;
-      width: 100%;
-      border-radius: var(--radius-lg);
-      padding: 18px;
-      background: radial-gradient(circle at top left, #0ea5e9 0, #020617 55%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-size: 15px;
-      font-weight: 500;
-      min-height: 160px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .flash-card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      border: 1px solid rgba(15, 23, 42, 0.4);
-      mix-blend-mode: soft-light;
-    }
-
-    .flash-meta {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    .flash-controls {
-      display: flex;
-      justify-content: flex-end;
-      gap: 6px;
-      margin-top: 8px;
-    }
-
-    .btn {
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s, transform 0.1s;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #0b1120;
-      border-color: rgba(15, 23, 42, 0.2);
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-strong);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      border-color: rgba(148, 163, 184, 0.35);
-      color: var(--text-muted);
-    }
-
-    .btn-ghost:hover {
-      background: rgba(15, 23, 42, 0.7);
-      color: #e5e7eb;
-    }
-
-    .btn:active {
-      transform: scale(0.97);
-    }
-
-    /* Quiz */
-    .quiz-body {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 14px;
-    }
-
-    .quiz-top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .progress-shell {
-      width: 100px;
-      height: 6px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.45);
-      overflow: hidden;
-    }
-
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent), var(--accent-strong));
-      transition: width 0.2s ease-out;
-    }
-
-    .quiz-question {
-      margin-top: 6px;
-      font-size: 15px;
-      font-weight: 500;
-    }
-
-    .quiz-options {
-      display: grid;
-      gap: 6px;
-      margin-top: 6px;
-    }
-
-    .quiz-option {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      padding: 6px 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      background: rgba(15, 23, 42, 0.8);
-      font-size: 13px;
-      transition: background 0.15s, border-color 0.15s, transform 0.1s;
-    }
-
-    .quiz-option span.key {
-      font-weight: 600;
-      color: var(--text-muted);
-    }
-
-    .quiz-option.selected {
-      border-color: var(--accent);
-      background: rgba(14, 165, 233, 0.18);
-      transform: translateY(-1px);
-    }
-
-    .quiz-bottom-row {
-      margin-top: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-    }
-
-    .quiz-result {
-      font-size: 13px;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    @media (max-width: 860px) {
-      .app-shell {
-        grid-template-columns: 1fr;
-      }
-      .sidebar {
-        order: 2;
-      }
-      .main {
-        order: 1;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="app-shell">
-    <header>
-      <h1>Aviation Security Learning Hub</h1>
-      <p>Designed for quick revision: concepts, flashcards, and mock tests.</p>
-    </header>
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-tabs">
-        <button class="sidebar-tab-btn active" data-group="core">Core</button>
-        <button class="sidebar-tab-btn" data-group="threats">Threats</button>
-        <button class="sidebar-tab-btn" data-group="xray">X-Ray</button>
-      </div>
-
-      <div>
-        <div class="section-label">Topics</div>
-        <ul class="topic-list" id="topicList"></ul>
-      </div>
-    </aside>
-
-    <!-- Main -->
-    <main class="main">
-      <div class="mode-tabs">
-        <button class="mode-btn active" data-mode="content">Content</button>
-        <button class="mode-btn" data-mode="flashcards">Flashcards</button>
-        <button class="mode-btn" data-mode="quiz">Mock Test</button>
-      </div>
-
-      <!-- Content Panel -->
-      <section class="panel" id="mode-content">
-        <div class="panel-header">
-          <div>
-            <div class="panel-title" id="contentTitle">Select a topic</div>
-            <div class="panel-subtitle" id="contentSubtitle">
-              Use the sidebar on the left to choose what you want to learn.
-            </div>
-          </div>
-          <div class="pill" id="contentTag">—</div>
-        </div>
-        <div class="content-layout">
-          <div class="content-body" id="contentBody">
-            <p>This panel will display structured explanations, bullet lists, and mnemonics for the topic you select.</p>
-            <div class="smart-card mt-12">
-              <div class="smart-card-title">Tip</div>
-              <p>Start with “DfT / CAA / Heathrow – Basics”, then move into Threat Levels and X-ray recognition.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Flashcards Panel -->
-      <section class="panel hidden" id="mode-flashcards">
-        <div class="panel-header">
-          <div>
-            <div class="panel-title">Flashcards</div>
-            <div class="panel-subtitle">Pick a topic and flip between Question and Answer.</div>
-          </div>
-          <div class="pill" id="flashTopicLabel">Topic: —</div>
-        </div>
-        <div class="flash-wrapper">
-          <div class="flash-top-row">
-            <div>
-              <span>Topic</span>
-            </div>
-            <select id="flashTopicSelect"></select>
-          </div>
-          <div class="flash-card" id="flashCardText">
-            Select a topic to begin.
-          </div>
-          <div class="flash-meta" id="flashMeta"></div>
-          <div class="flash-controls">
-            <button class="btn btn-ghost" id="btnFlashPrev">Prev</button>
-            <button class="btn btn-primary" id="btnFlashToggle">Show Answer</button>
-            <button class="btn btn-ghost" id="btnFlashNext">Next</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Quiz Panel -->
-      <section class="panel hidden" id="mode-quiz">
-        <div class="panel-header">
-          <div>
-            <div class="panel-title">Mock Test</div>
-            <div class="panel-subtitle">Short quizzes by topic to check your understanding.</div>
-          </div>
-          <div class="pill" id="quizTopicLabel">Topic: —</div>
-        </div>
-        <div class="quiz-body">
-          <div class="quiz-top-row">
-            <div>
-              Topic:
-              <select id="quizTopicSelect"></select>
-            </div>
-            <div class="progress-shell">
-              <div class="progress-bar" id="quizProgressBar"></div>
-            </div>
-          </div>
-          <div class="quiz-question" id="quizQuestion">Press “Start” to begin.</div>
-          <div class="quiz-options" id="quizOptions"></div>
-          <div class="quiz-bottom-row">
-            <div class="quiz-result" id="quizResult"></div>
-            <div>
-              <button class="btn btn-ghost" id="btnQuizRestart">Restart</button>
-              <button class="btn btn-primary" id="btnQuizNext">Start</button>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <script>
-    // ---- Data model: topics grouped for the sidebar ----
-    const topicGroups = {
-      core: [
-        { id: 1, name: "DfT – What & Basics", tag: "DfT" },
-        { id: 2, name: "CAA – What & Basics", tag: "CAA" },
-        { id: 3, name: "Heathrow – What & Basics", tag: "Heathrow" },
-        { id: 4, name: "DfT vs CAA vs Heathrow", tag: "Compare" },
-        { id: 5, name: "Security Behaviour – Golden Rules", tag: "Behaviour" }
-      ],
-      threats: [
-        { id: 6, name: "Threat = Motivation, Intent, Capability", tag: "MITC" },
-        { id: 7, name: "Threat Levels (UK)", tag: "Levels" },
-        { id: 8, name: "Sources of Threats", tag: "Sources" },
-        { id: 9, name: "Types & Locations of Attack", tag: "Attack" },
-        { id: 10, name: "Devices PB / VB / DB", tag: "Devices" }
-      ],
-      xray: [
-        { id: 11, name: "RFX & X-Ray", tag: "RFX" },
-        { id: 12, name: "Prohibited – Cabin vs Hold", tag: "Prohibited" },
-        { id: 13, name: "X-ray Colours & Density", tag: "Colours" },
-        { id: 14, name: "CT / 3D X-ray & Test Bag", tag: "CT" },
-        { id: 15, name: "EDS, TIP, CIP & Alarms", tag: "Systems" }
-      ]
-    };
-
-    // ---- Content detail per topicId ----
-    const contentById = {
-      1: {
-        title: "DfT – What & Basics",
-        subtitle: "Policy maker and sponsor for UK aviation.",
-        tag: "DfT • Government",
-        html: `
-<h3>Who they are</h3>
-<p>The Department for Transport (DfT) is the UK government department responsible for transport policy, including aviation security.</p>
-<h3>What they do</h3>
-<ul>
-  <li>Set the strategic policy framework for aviation security.</li>
-  <li>Define legal requirements and threat levels.</li>
-  <li>Are accountable to Parliament for aviation strategy.</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">Think of DfT as</div>
-  <p><strong class="tag-important">THE POLICY MAKER</strong> – they do not run airports, they set the rules and direction.</p>
-</div>
-        `
-      },
-      2: {
-        title: "CAA – What & Basics",
-        subtitle: "Independent regulator for safety, security and consumers.",
-        tag: "CAA • Regulator",
-        html: `
-<h3>Who they are</h3>
-<p>The Civil Aviation Authority (CAA) is a public corporation, independent from day-to-day politics.</p>
-<h3>What they do</h3>
-<ul>
-  <li>Regulate aviation safety, security and economics.</li>
-  <li>Issue licences and conduct inspections.</li>
-  <li>Have a primary duty to protect consumers / passengers.</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">Remember</div>
-  <p><strong class="tag-important">REGULATOR</strong> – they check if airports and airlines follow the rules set by government.</p>
-</div>
-        `
-      },
-      3: {
-        title: "Heathrow – What & Basics",
-        subtitle: "The operator and delivery body.",
-        tag: "Heathrow • Operator",
-        html: `
-<h3>Who they are</h3>
-<p>Heathrow Airport Ltd (HAL) is the private company that owns and operates Heathrow.</p>
-<h3>What they do</h3>
-<ul>
-  <li>Run day-to-day airport operations.</li>
-  <li>Implement security procedures on site.</li>
-  <li>Deliver projects like runway and terminal expansion.</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">Think of Heathrow as</div>
-  <p><strong class="tag-important">THE DELIVERY BODY</strong> – where policies and regulations become real processes and checks.</p>
-</div>
-        `
-      },
-      4: {
-        title: "DfT vs CAA vs Heathrow",
-        subtitle: "Separation of roles – policy, regulation, delivery.",
-        tag: "Compare",
-        html: `
-<h3>Main roles</h3>
-<ul>
-  <li><strong>DfT</strong> – sets policy and law, accountable to Parliament.</li>
-  <li><strong>CAA</strong> – regulates, licenses and enforces; protects passengers.</li>
-  <li><strong>Heathrow</strong> – operates the airport and implements security.</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">Smart art – Separation of powers</div>
-  <p><strong>Policy</strong> (DfT) → <strong>Regulation</strong> (CAA) → <strong>Delivery</strong> (Heathrow).</p>
-  <div class="badge-row">
-    <div class="badge badge-strong">DfT – Enabler</div>
-    <div class="badge badge-strong">CAA – Referee</div>
-    <div class="badge badge-strong">Heathrow – Builder/Operator</div>
-  </div>
-</div>
-        `
-      },
-      5: {
-        title: "Security Behaviour – Golden Rules",
-        subtitle: "Your behaviour is a critical part of security.",
-        tag: "Behaviour",
-        html: `
-<h3>Golden rules</h3>
-<ul>
-  <li>Be wary of inappropriate questions from anyone.</li>
-  <li>Do not discuss security matters with people who do not need to know.</li>
-  <li>No social media posts about security or restricted areas.</li>
-  <li>Keep PINs, passwords, keys, ID and equipment safe at all times.</li>
-  <li>If anything is compromised, inform your Security Manager (SM) immediately.</li>
-  <li>Keep uniform branding hidden outside work; return old uniforms to SM.</li>
-  <li>Never misuse ID.</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">Why it matters</div>
-  <p>Bad behaviour can lead to job loss, criminal charges and serious safety risks.</p>
-</div>
-        `
-      },
-      6: {
-        title: "Threat = Motivation, Intent, Capability",
-        subtitle: "How security defines threat.",
-        tag: "MITC",
-        html: `
-<h3>Three elements of threat</h3>
-<ul>
-  <li><strong>Motivation</strong> – why someone wants to cause harm.</li>
-  <li><strong>Intent</strong> – their decision to act.</li>
-  <li><strong>Capability</strong> – tools, skills and access to act.</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">Mnemonic – MITC</div>
-  <p><strong>“My Intent Creates Threat”</strong> – Motivation → Intent → Capability → Threat.</p>
-</div>
-        `
-      },
-      7: {
-        title: "Threat Levels (UK)",
-        subtitle: "How likely an attack is.",
-        tag: "Levels",
-        html: `
-<h3>Threat levels</h3>
-<ul>
-  <li><strong>Low</strong> – Highly unlikely.</li>
-  <li><strong>Moderate</strong> – Possible but not likely.</li>
-  <li><strong>Substantial</strong> – Likely.</li>
-  <li><strong>Severe</strong> – Highly likely.</li>
-  <li><strong>Critical</strong> – Highly likely in the near future.</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">Important</div>
-  <p>The current level is <strong class="tag-important">SUBSTANTIAL</strong> – an attack is likely. You must always know the current level.</p>
-</div>
-        `
-      },
-      8: {
-        title: "Sources of Threats",
-        subtitle: "Who might pose a risk.",
-        tag: "Sources",
-        html: `
-<p>Threats can come from:</p>
-<ul>
-  <li>Terrorists.</li>
-  <li>Insiders.</li>
-  <li>Persons acting unruly.</li>
-  <li>Refugees.</li>
-  <li>Criminals.</li>
-  <li>Radicalised persons.</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">Mnemonic</div>
-  <p><strong>“Trouble Is Usually Rooted in Clever Radicals”</strong>.</p>
-  <p>Each word reminds you of a threat source.</p>
-</div>
-        `
-      },
-      9: {
-        title: "Types & Locations of Attack",
-        subtitle: "What type and where it can happen.",
-        tag: "Attack",
-        html: `
-<h3>Types of attack</h3>
-<ul>
-  <li><strong>MTA</strong> – Marauding terrorist attack.</li>
-  <li>Sabotage.</li>
-  <li>Cyberattack.</li>
-  <li>Hijacking.</li>
-</ul>
-<h3>Locations</h3>
-<ul>
-  <li>On airport – inside the airport perimeter.</li>
-  <li>Off airport – near airport or on connecting infrastructure.</li>
-  <li>On airplane – cabin or hold.</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">Quick recall</div>
-  <p><strong>MSCH</strong> – Most Serious Critical Hazards – for the four attack types.</p>
-</div>
-        `
-      },
-      10: {
-        title: "Devices PB / VB / DB",
-        subtitle: "How a device is carried.",
-        tag: "Devices",
-        html: `
-<p>Devices can be:</p>
-<ul>
-  <li><strong>PB</strong> – Person-borne (carried on the body).</li>
-  <li><strong>VB</strong> – Vehicle-borne (in or on a vehicle).</li>
-  <li><strong>DB</strong> – Drone-borne (carried by a drone).</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">Think</div>
-  <p>People → Vehicles → Drones. Always ask: how could a device move towards the target?</p>
-</div>
-        `
-      },
-      11: {
-        title: "RFX & X-Ray",
-        subtitle: "Recognising firearms and explosives on screen.",
-        tag: "RFX",
-        html: `
-<p><strong>RFX</strong> means Recognition of Firearms and Explosives.</p>
-<ul>
-  <li>Identify shape and components of firearms.</li>
-  <li>Recognise key parts of explosive devices.</li>
-  <li>Use X-ray to spot concealment and unusual densities.</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">Skill</div>
-  <p>You are expected to combine <strong>knowledge of parts</strong> with <strong>image interpretation</strong> on the X-ray.</p>
-</div>
-        `
-      },
-      12: {
-        title: "Prohibited – Cabin vs Hold",
-        subtitle: "What must never pass.",
-        tag: "Prohibited",
-        html: `
-<h3>Cabin only examples</h3>
-<ul>
-  <li>Scissors with blades ≥ 6 cm from the pivot.</li>
-  <li>Sharp blades with blade length ≥ 6 cm.</li>
-  <li>Razor blades.</li>
-  <li>Liquids above allowed volume.</li>
-</ul>
-<h3>Cabin & hold</h3>
-<ul>
-  <li>Undeclared firearms and ammunition.</li>
-  <li>Explosive material, detonators, fuses.</li>
-  <li>Grenades and smoke devices.</li>
-  <li>Fireworks and pyrotechnics (including party poppers & crackers).</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">Legal basis</div>
-  <p>The UK Single Consolidated Direction sets the law on prohibited articles after Brexit.</p>
-</div>
-        `
-      },
-      13: {
-        title: "X-ray Colours & Density",
-        subtitle: "Orange, blue, green and brightness.",
-        tag: "Colours",
-        html: `
-<h3>Colours</h3>
-<ul>
-  <li><strong>Orange</strong> – Organic (once living), many explosives.</li>
-  <li><strong>Blue</strong> – Inorganic (never living), metals.</li>
-  <li><strong>Green</strong> – Mix of organic + inorganic; many homemade explosives.</li>
-</ul>
-<h3>Density</h3>
-<ul>
-  <li>Brighter colour = higher density.</li>
-  <li>Lighter colour = lower density.</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">Attention</div>
-  <p>Very dense areas can hide items behind them – always examine bright blocks carefully.</p>
-</div>
-        `
-      },
-      14: {
-        title: "CT / 3D X-ray & Test Bag",
-        subtitle: "Capabilities, limits and calibration.",
-        tag: "CT",
-        html: `
-<h3>Capabilities</h3>
-<ul>
-  <li>See inside bags without opening.</li>
-  <li>360° rotation and slice views.</li>
-  <li>Electricals & liquids can stay inside.</li>
-  <li>Highlights potential explosives and prohibited articles.</li>
-</ul>
-<h3>Limitations</h3>
-<ul>
-  <li>Subject to human error and fatigue.</li>
-  <li>Cannot handle items larger than tray size.</li>
-  <li>Operators typically limited to ~20 minutes on-screen and ~30 seconds per image.</li>
-  <li>Can damage camera film.</li>
-  <li>Does not penetrate very dense objects well.</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">Test bag</div>
-  <p>Special bags with red/yellow squares are used by SMs to test the system – they <strong class="tag-important">must always be rejected</strong>.</p>
-</div>
-        `
-      },
-      15: {
-        title: "EDS, TIP, CIP & Alarms",
-        subtitle: "System-generated and operator-generated alerts.",
-        tag: "Systems",
-        html: `
-<h3>EDS</h3>
-<p>Explosive Detection System – system-generated red square on the image.</p>
-<h3>TIP</h3>
-<p>Threat Image Projection – fake threat images used to test operators (one category at a time).</p>
-<h3>CIP</h3>
-<p>Centralised Image Processing – images from multiple lanes sent to operators to balance workload.</p>
-<h3>Alarms</h3>
-<ul>
-  <li><strong>Shield/density alarm</strong> – yellow square for very dense areas.</li>
-  <li><strong>Operator alarms</strong> – purple (first mark) and pink (confirmed) drawn by HSO.</li>
-  <li><strong>Obvious threat button</strong> – yellow button for obvious firearm/IED only.</li>
-</ul>
-<div class="smart-card">
-  <div class="smart-card-title">TIP pop-ups</div>
-  <p>Green – correct, Red – incorrect/timeout, Yellow – real image: log out and speak to SM.</p>
-</div>
-        `
-      }
-    };
-
-    // ---- Flashcards (attach to logical topic ids above) ----
-    const flashcards = [
-      { topicId: 1, q: "What is DfT’s main role in aviation security?", a: "DfT sets strategic policy and legal requirements for aviation and is accountable to Parliament." },
-      { topicId: 2, q: "Who does the CAA’s primary duty focus on?", a: "Protecting the interests of consumers/passengers while regulating safety, security and economics." },
-      { topicId: 3, q: "What is Heathrow Airport Ltd responsible for?", a: "Owning and operating the airport infrastructure and implementing security measures." },
-      { topicId: 4, q: "In one line, describe DfT, CAA and Heathrow.", a: "DfT sets the rules, CAA checks the rules are followed, Heathrow delivers security on the ground." },
-      { topicId: 6, q: "Name the three elements that combine into a threat.", a: "Motivation, Intent and Capability." },
-      { topicId: 7, q: "What does SUBSTANTIAL threat level mean?", a: "An attack is likely." },
-      { topicId: 8, q: "Give three sources of threats in aviation.", a: "Terrorists, insiders, unruly persons, refugees, criminals, radicalised persons (any three)." },
-      { topicId: 10, q: "What do PB, VB and DB stand for?", a: "Person-borne, Vehicle-borne and Drone-borne devices." },
-      { topicId: 13, q: "On X-ray, which colour is organic, inorganic, and mixed?", a: "Organic = Orange, Inorganic = Blue, Mixed = Green." },
-      { topicId: 15, q: "What does an EDS alert look like on screen?", a: "A system-generated red square." }
-    ];
-
-    // ---- Quiz questions (topic-based) ----
-    const quizQuestions = [
-      {
-        topicId: 1,
-        text: "Which statement best describes DfT?",
-        options: {
-          A: "Runs day-to-day airport operations",
-          B: "Independent regulator of aviation",
-          C: "Government department that sets policy and law",
-          D: "Company that owns aircraft"
-        },
-        correct: "C"
-      },
-      {
-        topicId: 2,
-        text: "The CAA is mainly responsible for:",
-        options: {
-          A: "Managing airport retail",
-          B: "Regulating safety, security and economics",
-          C: "Writing criminal law",
-          D: "Flying aircraft"
-        },
-        correct: "B"
-      },
-      {
-        topicId: 6,
-        text: "Threat in aviation security is defined as a combination of:",
-        options: {
-          A: "Time, Place, Weapon",
-          B: "Motivation, Intent, Capability",
-          C: "Passengers, Staff, Aircraft",
-          D: "Lights, Cameras, Doors"
-        },
-        correct: "B"
-      },
-      {
-        topicId: 7,
-        text: "Which threat level means an attack is likely?",
-        options: {
-          A: "Moderate",
-          B: "Low",
-          C: "Substantial",
-          D: "Critical"
-        },
-        correct: "C"
-      },
-      {
-        topicId: 10,
-        text: "PB, VB and DB refer to devices that are:",
-        options: {
-          A: "Personal, Bag, Digital",
-          B: "Person-borne, Vehicle-borne, Drone-borne",
-          C: "Passenger, Baggage, Document-related",
-          D: "Pilot, Vehicle, Door-related"
-        },
-        correct: "B"
-      },
-      {
-        topicId: 13,
-        text: "On X-ray, mixed materials often appear as:",
-        options: {
-          A: "Orange",
-          B: "Blue",
-          C: "Green",
-          D: "Purple"
-        },
-        correct: "C"
-      },
-      {
-        topicId: 15,
-        text: "An obvious threat button should be used for:",
-        options: {
-          A: "Any item you are unsure about",
-          B: "Only obvious firearms or IED threats",
-          C: "Every piece of abandoned luggage",
-          D: "All routine alarms"
-        },
-        correct: "B"
-      }
-    ];
-
-    // ---- Sidebar rendering ----
-    const topicListEl = document.getElementById("topicList");
-    const sidebarTabs = document.querySelectorAll(".sidebar-tab-btn");
-    let currentGroup = "core";
-    let currentTopicId = null;
-
-    function renderTopicList() {
-      topicListEl.innerHTML = "";
-      const list = topicGroups[currentGroup];
-      list.forEach((t) => {
-        const li = document.createElement("li");
-        li.className = "topic-item" + (t.id === currentTopicId ? " active" : "");
-        const span = document.createElement("span");
-        span.textContent = t.name;
-        const badge = document.createElement("small");
-        badge.textContent = t.tag;
-        li.appendChild(span);
-        li.appendChild(badge);
-        li.addEventListener("click", () => {
-          currentTopicId = t.id;
-          renderTopicList();
-          showContentForTopic(t.id);
-          syncFlashTopic(t.id);
-          syncQuizTopic(t.id);
-        });
-        topicListEl.appendChild(li);
-      });
-    }
-
-    sidebarTabs.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        sidebarTabs.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentGroup = btn.dataset.group;
-        currentTopicId = null;
-        renderTopicList();
-        // Reset content view to prompt selection
-        document.getElementById("contentTitle").textContent = "Select a topic";
-        document.getElementById("contentSubtitle").textContent =
-          "Use the sidebar on the left to choose what you want to learn.";
-        document.getElementById("contentTag").textContent = "—";
-        document.getElementById("contentBody").innerHTML =
-          "<p>This panel will display structured explanations, bullet lists, and mnemonics for the topic you select.</p>";
-      });
-    });
-
-    // ---- Mode switching (content / flashcards / quiz) ----
-    const modeButtons = document.querySelectorAll(".mode-btn");
-    const modePanels = {
-      content: document.getElementById("mode-content"),
-      flashcards: document.getElementById("mode-flashcards"),
-      quiz: document.getElementById("mode-quiz")
-    };
-
-    modeButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        modeButtons.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        const mode = btn.dataset.mode;
-        Object.keys(modePanels).forEach((key) => {
-          modePanels[key].classList.toggle("hidden", key !== mode);
-        });
-      });
-    });
-
-    // ---- Content rendering ----
-    function showContentForTopic(topicId) {
-      const data = contentById[topicId];
-      if (!data) return;
-      document.getElementById("contentTitle").textContent = data.title;
-      document.getElementById("contentSubtitle").textContent = data.subtitle;
-      document.getElementById("contentTag").textContent = data.tag;
-      document.getElementById("contentBody").innerHTML = data.html;
-    }
-
-    // ---- Flashcards logic ----
-    const flashTopicSelect = document.getElementById("flashTopicSelect");
-    const flashTopicLabel = document.getElementById("flashTopicLabel");
-    const flashCardText = document.getElementById("flashCardText");
-    const flashMeta = document.getElementById("flashMeta");
-    const btnFlashPrev = document.getElementById("btnFlashPrev");
-    const btnFlashNext = document.getElementById("btnFlashNext");
-    const btnFlashToggle = document.getElementById("btnFlashToggle");
-
-    let flashCurrentTopic = null;
-    let flashFiltered = [];
-    let flashIndex = 0;
-    let flashShowAnswer = false;
-
-    function buildFlashTopicList() {
-      // Unique topicIds from flashcards, map to topicGroups names
-      const topicIdSet = new Set(flashcards.map((f) => f.topicId));
-      flashTopicSelect.innerHTML = "";
-      for (const topicId of topicIdSet) {
-        // Find display name
-        let name = "Topic " + topicId;
-        for (const groupKey of Object.keys(topicGroups)) {
-          const inGroup = topicGroups[groupKey].find((t) => t.id === topicId);
-          if (inGroup) {
-            name = inGroup.name;
-            break;
-          }
-        }
-        const opt = document.createElement("option");
-        opt.value = String(topicId);
-        opt.textContent = name;
-        flashTopicSelect.appendChild(opt);
-      }
-      if (flashTopicSelect.options.length > 0) {
-        flashCurrentTopic = Number(flashTopicSelect.value);
-        flashTopicLabel.textContent = "Topic: " + flashTopicSelect.options[flashTopicSelect.selectedIndex].text;
-        reloadFlashcards();
-      } else {
-        flashCardText.textContent = "No flashcards available.";
-      }
-    }
-
-    function reloadFlashcards() {
-      flashFiltered = flashcards.filter((f) => f.topicId === flashCurrentTopic);
-      flashIndex = 0;
-      flashShowAnswer = false;
-      renderFlashcard();
-    }
-
-    function renderFlashcard() {
-      if (!flashFiltered.length) {
-        flashCardText.textContent = "No flashcards for this topic yet.";
-        flashMeta.textContent = "";
-        btnFlashToggle.textContent = "Show Answer";
-        return;
-      }
-      const card = flashFiltered[flashIndex];
-      flashCardText.textContent = flashShowAnswer ? card.a : card.q;
-      flashMeta.textContent = `Card ${flashIndex + 1} of ${flashFiltered.length} • ${flashShowAnswer ? "Answer" : "Question"}`;
-      btnFlashToggle.textContent = flashShowAnswer ? "Show Question" : "Show Answer";
-    }
-
-    flashTopicSelect.addEventListener("change", () => {
-      flashCurrentTopic = Number(flashTopicSelect.value);
-      flashTopicLabel.textContent = "Topic: " + flashTopicSelect.options[flashTopicSelect.selectedIndex].text;
-      reloadFlashcards();
-    });
-
-    btnFlashPrev.addEventListener("click", () => {
-      if (!flashFiltered.length) return;
-      flashIndex = (flashIndex - 1 + flashFiltered.length) % flashFiltered.length;
-      flashShowAnswer = false;
-      renderFlashcard();
-    });
-
-    btnFlashNext.addEventListener("click", () => {
-      if (!flashFiltered.length) return;
-      flashIndex = (flashIndex + 1) % flashFiltered.length;
-      flashShowAnswer = false;
-      renderFlashcard();
-    });
-
-    btnFlashToggle.addEventListener("click", () => {
-      if (!flashFiltered.length) return;
-      flashShowAnswer = !flashShowAnswer;
-      renderFlashcard();
-    });
-
-    function syncFlashTopic(topicId) {
-      if (!topicId) return;
-      const optionIndex = Array.from(flashTopicSelect.options).findIndex(
-        (opt) => Number(opt.value) === topicId
-      );
-      if (optionIndex >= 0) {
-        flashTopicSelect.selectedIndex = optionIndex;
-        flashCurrentTopic = topicId;
-        flashTopicLabel.textContent = "Topic: " + flashTopicSelect.options[optionIndex].text;
-        reloadFlashcards();
-      }
-    }
-
-    // ---- Quiz logic ----
-    const quizTopicSelect = document.getElementById("quizTopicSelect");
-    const quizTopicLabel = document.getElementById("quizTopicLabel");
-    const quizQuestionEl = document.getElementById("quizQuestion");
-    const quizOptionsEl = document.getElementById("quizOptions");
-    const quizProgressBar = document.getElementById("quizProgressBar");
-    const quizResultEl = document.getElementById("quizResult");
-    const btnQuizRestart = document.getElementById("btnQuizRestart");
-    const btnQuizNext = document.getElementById("btnQuizNext");
-
-    let quizCurrentTopic = null;
-    let quizFiltered = [];
-    let quizIndex = 0;
-    let quizScore = 0;
-    let quizSelected = null;
-    let quizStarted = false;
-
-    function buildQuizTopicList() {
-      const topicIdSet = new Set(quizQuestions.map((q) => q.topicId));
-      quizTopicSelect.innerHTML = "";
-      for (const topicId of topicIdSet) {
-        let name = "Topic " + topicId;
-        for (const groupKey of Object.keys(topicGroups)) {
-          const inGroup = topicGroups[groupKey].find((t) => t.id === topicId);
-          if (inGroup) {
-            name = inGroup.name;
-            break;
-          }
-        }
-        const opt = document.createElement("option");
-        opt.value = String(topicId);
-        opt.textContent = name;
-        quizTopicSelect.appendChild(opt);
-      }
-      if (quizTopicSelect.options.length > 0) {
-        quizCurrentTopic = Number(quizTopicSelect.value);
-        quizTopicLabel.textContent = "Topic: " + quizTopicSelect.options[quizTopicSelect.selectedIndex].text;
-        resetQuiz();
-      }
-    }
-
-    function resetQuiz() {
-      quizFiltered = quizQuestions.filter((q) => q.topicId === quizCurrentTopic);
-      quizIndex = 0;
-      quizScore = 0;
-      quizSelected = null;
-      quizStarted = false;
-      quizProgressBar.style.width = "0%";
-      quizResultEl.textContent = "";
-      quizQuestionEl.textContent = quizFiltered.length
-        ? "Press “Start” to begin."
-        : "No questions for this topic yet.";
-      quizOptionsEl.innerHTML = "";
-      btnQuizNext.textContent = "Start";
-    }
-
-    function renderQuizQuestion() {
-      if (!quizFiltered.length) {
-        quizQuestionEl.textContent = "No questions for this topic yet.";
-        quizOptionsEl.innerHTML = "";
-        return;
-      }
-      const q = quizFiltered[quizIndex];
-      quizQuestionEl.textContent = q.text;
-      quizOptionsEl.innerHTML = "";
-      quizSelected = null;
-      const total = quizFiltered.length;
-      const progress = ((quizIndex) / total) * 100;
-      quizProgressBar.style.width = progress + "%";
-
-      Object.entries(q.options).forEach(([key, value]) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "quiz-option";
-        btn.innerHTML = `<span class="key">${key}</span><span>${value}</span>`;
-        btn.addEventListener("click", () => {
-          quizSelected = key;
-          Array.from(quizOptionsEl.children).forEach((child) =>
-            child.classList.remove("selected")
-          );
-          btn.classList.add("selected");
-        });
-        quizOptionsEl.appendChild(btn);
-      });
-
-      btnQuizNext.textContent = quizIndex === total - 1 ? "Finish" : "Next";
-    }
-
-    quizTopicSelect.addEventListener("change", () => {
-      quizCurrentTopic = Number(quizTopicSelect.value);
-      quizTopicLabel.textContent = "Topic: " + quizTopicSelect.options[quizTopicSelect.selectedIndex].text;
-      resetQuiz();
-    });
-
-    btnQuizNext.addEventListener("click", () => {
-      if (!quizFiltered.length) return;
-      if (!quizStarted) {
-        quizStarted = true;
-        quizScore = 0;
-        quizIndex = 0;
-        renderQuizQuestion();
-        return;
-      }
-      const q = quizFiltered[quizIndex];
-      if (!quizSelected) {
-        quizResultEl.style.color = "#f97373";
-        quizResultEl.textContent = "Select an option before continuing.";
-        return;
-      }
-      if (quizSelected === q.correct) quizScore++;
-      quizResultEl.textContent = "";
-      const total = quizFiltered.length;
-      if (quizIndex < total - 1) {
-        quizIndex++;
-        renderQuizQuestion();
-      } else {
-        quizProgressBar.style.width = "100%";
-        quizQuestionEl.textContent = "Test complete.";
-        quizOptionsEl.innerHTML = "";
-        quizResultEl.style.color = "#4ade80";
-        quizResultEl.textContent = `Score: ${quizScore} / ${total}`;
-        btnQuizNext.textContent = "Restart";
-        quizStarted = false;
-      }
-    });
-
-    btnQuizRestart.addEventListener("click", resetQuiz);
-
-    function syncQuizTopic(topicId) {
-      if (!topicId) return;
-      const optionIndex = Array.from(quizTopicSelect.options).findIndex(
-        (opt) => Number(opt.value) === topicId
-      );
-      if (optionIndex >= 0) {
-        quizTopicSelect.selectedIndex = optionIndex;
-        quizCurrentTopic = topicId;
-        quizTopicLabel.textContent = "Topic: " + quizTopicSelect.options[optionIndex].text;
-        resetQuiz();
-      }
-    }
-
-    // ---- Init ----
-    function init() {
-      renderTopicList();
-      buildFlashTopicList();
-      buildQuizTopicList();
-    }
-
-    init();
-  </script>
-</body>
-</html>
+// 1. TOPICS
+const topics = [
+  { id: 1,  name: "DfT – What & Basics" },
+  { id: 2,  name: "CAA – What & Basics" },
+  { id: 3,  name: "Heathrow – What & Basics" },
+  { id: 4,  name: "Basic similarities & differences (DfT / CAA / Heathrow)" },
+  { id: 5,  name: "Threat = Motivation, Intent, Capability (MITC)" },
+  { id: 6,  name: "Threat levels" },
+  { id: 7,  name: "Sources of threat" },
+  { id: 8,  name: "Types of attack" },
+  { id: 9,  name: "Where attacks can occur (On/Off Airport / On Airplane)" },
+  { id: 10, name: "Types of devices – PB / VB / DB" },
+  { id: 11, name: "Extremely important behaviour points" },
+  { id: 12, name: "RFX & X‑Ray – recognition of firearms and explosives" },
+  { id: 13, name: "Prohibited in cabin" },
+  { id: 14, name: "Prohibited in cabin and hold" },
+  { id: 15, name: "UK Single Consolidated Direction – prohibited items law" },
+  { id: 16, name: "Firearms (FA) – definition" },
+  { id: 17, name: "Suspicious signs of concealment" },
+  { id: 18, name: "Handling prohibited items (excluding FA & explosives)" },
+  { id: 19, name: "Handling FA & explosives concealed" },
+  { id: 20, name: "RE components (revolver)" },
+  { id: 21, name: "Self‑loading firearm components" },
+  { id: 22, name: "Ammunition components" },
+  { id: 23, name: "3D / CT X‑Ray – capabilities & limitations" },
+  { id: 24, name: "CT equipment test bag" },
+  { id: 25, name: "X‑Ray colours – organic / inorganic / mixed" },
+  { id: 26, name: "Density – brighter vs lighter" },
+  { id: 27, name: "EDS – Explosive Detection System" },
+  { id: 28, name: "Obvious Threat button" },
+  { id: 29, name: "Shield – density alarm" },
+  { id: 30, name: "Operator alarms – HSO (purple & pink)" },
+  { id: 31, name: "CIP – Centralised Image Processing" },
+  { id: 32, name: "TIP – Threat Image Projection" },
+  { id: 33, name: "TIP pop‑up messages" }
+];
+
+// 2. CONTENT ITEMS (exactly what you typed, structured per topic)
+const contentItems = [
+  {
+    id: 1,
+    topicId: 1,
+    title: "DfT – What they are and what they do",
+    body: `
+Topic: DfT
+
+What they are:
+- The Department for Transport (DfT) is a UK government department.
+- They are the policy maker for transport, including aviation.
+
+Basics on what they do:
+- Set the strategic policy framework for aviation (including security).
+- Set things like the Airports National Policy Statement.
+- Are accountable to Parliament.
+
+`
+  },
+  {
+    id: 2,
+    topicId: 2,
+    title: "CAA – What they are and what they do",
+    body: `
+Topic: CAA
+
+What they are:
+- The Civil Aviation Authority (CAA) is an independent public corporation.
+- They are the independent regulator for aviation.
+
+Basics on what they do:
+- Regulate safety, security and economics (including price controls).
+- Have a primary duty to protect the interests of consumers/passengers.
+- Oversee aviation security compliance.
+
+`
+  },
+  {
+    id: 3,
+    topicId: 3,
+    title: "Heathrow – What they are and what they do",
+    body: `
+Topic: Heathrow
+
+What they are:
+- Heathrow Airport Ltd (HAL) is the private sector airport operator.
+- They are the delivery body.
+
+Basics on what they do:
+- Own and operate the airport infrastructure.
+- Run day‑to‑day airport operations.
+- Are responsible for delivering expansion (such as the Northwest Runway).
+
+`
+  },
+  {
+    id: 4,
+    topicId: 4,
+    title: "Basic similarities and differences – DfT, CAA, Heathrow",
+    body: `
+Basic similarities:
+- All three are part of the UK aviation system.
+- All three care about safety and security.
+- All three are involved in delivering aviation growth and protecting passengers.
+
+Basic differences:
+- DfT: Government department; policy maker; accountable to Parliament.
+- CAA: Independent regulator; focuses on safety, security and consumer protection.
+- Heathrow: Private operator; delivers infrastructure and daily operations.
+
+`
+  },
+  {
+    id: 5,
+    topicId: 5,
+    title: "Threat – Motivation, Intent and Capability (MITC)",
+    body: `
+Threat:
+
+A threat is a combination of:
+- Motivation
+- Intent
+- Capability
+
+You can remember this as MITC (or a mnemonic you prefer).
+
+Example mnemonic:
+- MITC – Motivation, Intent, Capability = Threat.
+
+`
+  },
+  {
+    id: 6,
+    topicId: 6,
+    title: "Threat levels",
+    body: `
+Threat levels (UK):
+
+- Low – Highly unlikely.
+- Moderate – Possibly but not likely.
+- Substantial – Likely.
+- Severe – Highly likely.
+- Critical – Highly likely in the near future.
+
+Current threat level: SUBSTANTIAL (very important).
+
+`
+  },
+  {
+    id: 7,
+    topicId: 7,
+    title: "Sources of threat",
+    body: `
+Threats can come from:
+
+- Terrorists.
+- Insiders.
+- Persons acting unruly.
+- Refugees.
+- Criminals.
+- Radicalised persons.
+
+You can create a mnemonic for this list (for example using the first letters).
+
+`
+  },
+  {
+    id: 8,
+    topicId: 8,
+    title: "Types of attack",
+    body: `
+Types of attack:
+
+- MTA – Marauding terrorist attack.
+- Sabotage.
+- Cyberattack.
+- Hijacking.
+
+`
+  },
+  {
+    id: 9,
+    topicId: 9,
+    title: "Where attacks can occur",
+    body: `
+Attacks can be categorised as:
+
+- On Airport – inside the airport.
+- Off Airport – near or around the airport, or on connecting infrastructure.
+- On Airplane – on board the aircraft.
+
+`
+  },
+  {
+    id: 10,
+    topicId: 10,
+    title: "Types of devices – PB / VB / DB",
+    body: `
+Types of devices:
+
+- PB – Person borne.
+- VB – Vehicle borne.
+- DB – Drone borne.
+
+`
+  },
+  {
+    id: 11,
+    topicId: 11,
+    title: "Extremely important behaviour points",
+    body: `
+Things to keep in mind (extremely important):
+
+- Be wary of inappropriate questions (from anyone).
+- Do not discuss security matters (with anyone).
+- No social media related to security.
+- PINs, passwords, keys, ID, equipment – keep safe at all times.
+- In case of compromise, immediately speak to your supervisor (SM – Security Manager).
+- Uniform – keep branding hidden outside of work.
+- Do not dispose of uniforms at home; hand over to supervisor (SM).
+- Never misuse ID.
+
+Consequences:
+- These actions could lead to very serious (dire) consequences.
+
+`
+  },
+  {
+    id: 12,
+    topicId: 12,
+    title: "RFX and X‑Ray",
+    body: `
+RFX and X‑Ray:
+
+RFX – Recognition of Firearms and Explosives.
+
+- X‑Ray is used for recognition of firearms and explosives.
+- You must be able to recognise firearms and explosive threats on X‑ray images.
+
+`
+  },
+  {
+    id: 13,
+    topicId: 13,
+    title: "Prohibited in airplane cabin",
+    body: `
+Articles prohibited in the airplane cabin:
+
+- Scissors (6 cm or more from the pivot point).
+- Sharp blades (blade size of 6 cm or more).
+- Razor blades.
+- Liquids over the allowed quantity (you mentioned 2 litres; always check current liquid rules).
+- Any prohibited articles (as defined by regulation).
+
+`
+  },
+  {
+    id: 14,
+    topicId: 14,
+    title: "Prohibited in both cabin and hold",
+    body: `
+Prohibited in both airplane cabin and hold:
+
+- Undeclared firearms and ammunition / gunpowder.
+- Explosive material.
+- Any detonators or fuses ("D or F").
+- Any grenade or smoke grenade ("gre" or smoke g).
+- Any fireworks and pyrotechnics, including but not restricted to party poppers, Christmas crackers etc. because they contain gunpowder‑like material.
+
+`
+  },
+  {
+    id: 15,
+    topicId: 15,
+    title: "UK Single Consolidated Direction",
+    body: `
+UK Single Consolidated Direction:
+
+- A prohibited item is directed by the UK Single Consolidated Direction.
+- This sets the law for prohibited items in the UK after EU exit / Brexit.
+
+`
+  },
+  {
+    id: 16,
+    topicId: 16,
+    title: "FA – Firearms definition",
+    body: `
+FA – Firearms:
+
+- Anything that will allow a projectile to be launched, either solid or liquid.
+- This applies even if it only seems like it can be discharged, whether it is capable of being discharged or not.
+
+`
+  },
+  {
+    id: 17,
+    topicId: 17,
+    title: "Suspicious signs of concealment",
+    body: `
+Suspicious signs of concealment – look out for:
+
+- Location (unusual places).
+- Weight and balance (does it feel right?).
+- Extra stitching.
+- Extra zips.
+- Extra pockets.
+
+`
+  },
+  {
+    id: 18,
+    topicId: 18,
+    title: "Prohibited items (excluding FA and explosives) concealed",
+    body: `
+Prohibited items (excluding firearms and explosives) concealed:
+
+If found on a body search:
+- Inform SM discreetly.
+- Inform that the search is INCOMPLETE.
+
+If found in a bag:
+- Keep the item away from the passenger.
+- Keep searching and complete the search.
+- Inform SM discreetly.
+- Inform that the search is COMPLETE.
+
+`
+  },
+  {
+    id: 19,
+    topicId: 19,
+    title: "FA and explosives concealed",
+    body: `
+FA and explosives concealed:
+
+If found on a body search:
+- Stop the search immediately.
+- Discreetly inform SM and advise the search is INCOMPLETE.
+
+If found in a bag search:
+- Stop the search immediately.
+- Discreetly inform SM and advise the search is INCOMPLETE.
+
+(In both cases: stop the search and follow SM / SOP instructions.)
+
+`
+  },
+  {
+    id: 20,
+    topicId: 20,
+    title: "RE components (revolver)",
+    body: `
+RE – components (revolver):
+
+- Main frame.
+- Crane.
+- Cylinder.
+
+`
+  },
+  {
+    id: 21,
+    topicId: 21,
+    title: "Self‑loading firearm components",
+    body: `
+Self‑loading firearm components:
+
+- Barrel.
+- Main frame.
+- Return spring.
+- Return spring guide.
+- Magazine.
+- Cross pin.
+- Top slide.
+
+`
+  },
+  {
+    id: 22,
+    topicId: 22,
+    title: "Ammunition components",
+    body: `
+Ammunition components:
+
+- Case (casing).
+- Primer.
+- Bullet.
+- Propellant / powder.
+
+(You wrote: am, casing, primer, bull – these map to the standard components above.)
+
+`
+  },
+  {
+    id: 23,
+    topicId: 23,
+    title: "3D X‑Ray / CT – capabilities and limitations",
+    body: `
+3D X‑Ray / CT – capabilities:
+
+- Look inside without opening the bag.
+- Do not need to check 100% of the bags manually.
+- 360 degrees rotation and slice functions.
+- Electricals and liquids can stay inside.
+- Highlight potential explosive and prohibited articles.
+
+Limitations:
+
+- Subject to human error.
+- Not capable of screening items larger than tray size.
+- Limit on screen reading time for operators (around 20 minutes).
+- Limit on decision‑making time for each image (around 30 seconds).
+- Can damage camera film.
+- Does not penetrate dense objects effectively.
+
+`
+  },
+  {
+    id: 24,
+    topicId: 24,
+    title: "CT equipment testing bag",
+    body: `
+CT equipment testing:
+
+- Test items will have a red square and yellow square.
+- They will be in the shape of a case.
+- Used by Security Managers (SMs) to test machines and check calibration.
+- This test bag ALWAYS needs to be rejected.
+
+`
+  },
+  {
+    id: 25,
+    topicId: 25,
+    title: "X‑Ray colours – organic, inorganic, mix",
+    body: `
+X‑Ray colours:
+
+- Organic material (once living) – colour orange.
+  (Most explosives.)
+
+- Inorganic material (never living) – colour blue.
+  (Metals.)
+
+- Mixed material – colour green.
+  (Organic and inorganic together.)
+
+- Mix of orange and blue shows up as green.
+- Most home‑made explosives show up as green.
+
+`
+  },
+  {
+    id: 26,
+    topicId: 26,
+    title: "Density – brighter vs lighter",
+    body: `
+X‑Ray density:
+
+- Brighter colour – high material density.
+- Lighter colour – low material density.
+
+`
+  },
+  {
+    id: 27,
+    topicId: 27,
+    title: "EDS – Explosive Detection System",
+    body: `
+EDS – Explosive Detection System:
+
+- System‑generated.
+- Depicted by a red square.
+
+`
+  },
+  {
+    id: 28,
+    topicId: 28,
+    title: "Obvious threat button",
+    body: `
+Obvious threat:
+
+- Yellow button on top of the screen.
+- Used only for obvious firearm and improvised explosive (FA and IED) threats.
+
+`
+  },
+  {
+    id: 29,
+    topicId: 29,
+    title: "Shield – density alarm",
+    body: `
+Shield – density alarm:
+
+- Density alarm generated automatically by the system.
+- Depicted by a yellow square.
+
+`
+  },
+  {
+    id: 30,
+    topicId: 30,
+    title: "Operator alarms – HSO",
+    body: `
+Operator alarms – HSO:
+
+- Purple – drawn once identified (only identify once sliced).
+- Pink – when confirmed.
+
+`
+  },
+  {
+    id: 31,
+    topicId: 31,
+    title: "CIP – Centralised Image Processing",
+    body: `
+CIP – Centralised Image Processing:
+
+- All operators will receive images from different lanes.
+- Used to manage workload.
+
+`
+  },
+  {
+    id: 32,
+    topicId: 32,
+    title: "TIP – Threat Image Projection",
+    body: `
+TIP – Threat Image Projection:
+
+- Fake images used to track operators.
+- It can only be for 1 category at a time:
+  - Devices.
+  - Firearms.
+  - Sharps.
+  - Other.
+
+`
+  },
+  {
+    id: 33,
+    topicId: 33,
+    title: "TIP pop‑up messages",
+    body: `
+TIP pop‑up messages (once detected):
+
+- Will only come as green or red:
+  - Green – correctly detected.
+  - Red – incorrect detection or timed out.
+
+- Yellow – image is real and you need to log out and speak to the SM.
+
+`
+  }
+];
+// FLASHCARDS – one or more per topicId
+const flashcards = [
+  { topicId: 1, q: "Who are DfT and what do they do?", a: "DfT is a UK government department. They are the policy maker for transport and set strategic aviation policy, including security, and are accountable to Parliament." },
+  { topicId: 2, q: "Who are the CAA and what do they do?", a: "The CAA is an independent public corporation. They regulate safety, security and economics and protect consumers/passengers." },
+  { topicId: 3, q: "Who are Heathrow Airport Ltd and what is their role?", a: "Heathrow is a private airport operator (delivery body). They own and operate the airport and are responsible for day‑to‑day operations and delivering expansion." },
+  { topicId: 4, q: "What is the key difference between DfT, CAA and Heathrow?", a: "DfT sets policy, CAA regulates and oversees, Heathrow operates and delivers." },
+
+  { topicId: 5, q: "What three elements combine into a threat?", a: "Motivation, Intent and Capability." },
+  { topicId: 5, q: "What does MITC stand for?", a: "Motivation, Intent, Capability, Threat (a way to remember the elements of threat)." },
+
+  { topicId: 6, q: "List all five UK threat levels.", a: "Low, Moderate, Substantial, Severe, Critical." },
+  { topicId: 6, q: "What does the current threat level 'Substantial' mean?", a: "An attack is likely." },
+
+  { topicId: 7, q: "Name three possible sources of threat.", a: "Any three of: terrorists, insiders, persons acting unruly, refugees, criminals, radicalised persons." },
+
+  { topicId: 8, q: "What does MTA stand for?", a: "Marauding terrorist attack." },
+  { topicId: 8, q: "Name two other types of attack besides MTA.", a: "Any two of: sabotage, cyberattack, hijacking." },
+
+  { topicId: 9, q: "What are the three location categories for attacks?", a: "On Airport, Off Airport, On Airplane." },
+
+  { topicId: 10, q: "What does PB stand for?", a: "Person borne." },
+  { topicId: 10, q: "What does VB stand for?", a: "Vehicle borne." },
+  { topicId: 10, q: "What does DB stand for?", a: "Drone borne." },
+
+  { topicId: 11, q: "What should you do if your ID or keys are compromised?", a: "Immediately speak to your supervisor / Security Manager (SM)." },
+  { topicId: 11, q: "Should you discuss security matters on social media?", a: "No. Do not discuss or post security matters on social media." },
+
+  { topicId: 12, q: "What does RFX stand for, and what is it about?", a: "Recognition of Firearms and Explosives – recognising firearms and explosive threats on X‑Ray." },
+
+  { topicId: 13, q: "From what blade length are scissors generally prohibited in the cabin?", a: "6 cm or more from the pivot point." },
+  { topicId: 13, q: "Name two items prohibited in the cabin.", a: "Examples: scissors ≥6 cm, sharp blades ≥6 cm, razor blades, large liquids, any prohibited article." },
+
+  { topicId: 14, q: "Are undeclared firearms and ammunition allowed in the cabin or hold?", a: "No. They are prohibited in both cabin and hold." },
+
+  { topicId: 15, q: "What does the UK Single Consolidated Direction do?", a: "It sets the law for prohibited items and security requirements in the UK after Brexit." },
+
+  { topicId: 16, q: "How is a firearm (FA) defined?", a: "Anything that will allow a projectile (solid or liquid) to be launched, even if it only seems capable of being discharged." },
+
+  { topicId: 17, q: "Name two suspicious signs of concealment.", a: "Any two of: unusual location, odd weight and balance, extra stitching, extra zips, extra pockets." },
+
+  { topicId: 18, q: "If a prohibited item (not FA/EX) is found on a body search, what do you do?", a: "Inform SM discreetly and state the search is incomplete." },
+  { topicId: 18, q: "If a prohibited item (not FA/EX) is found in a bag, what do you do?", a: "Keep the item away from the passenger, complete the search, then inform SM discreetly and state the search is complete." },
+
+  { topicId: 19, q: "If a firearm or explosive is found in a body search, what is your first action?", a: "Stop the search immediately and discretely inform SM and state the search is incomplete." },
+
+  { topicId: 20, q: "List the three RE (revolver) components.", a: "Main frame, crane, cylinder." },
+
+  { topicId: 21, q: "List three self‑loading firearm components.", a: "Any three of: barrel, main frame, return spring, return spring guide, magazine, cross pin, top slide." },
+
+  { topicId: 22, q: "Name the four basic ammunition components.", a: "Case, primer, bullet, propellant/powder." },
+
+  { topicId: 23, q: "Name two capabilities of 3D / CT X‑Ray.", a: "Examples: look inside without opening, 360° rotation and slicing, electricals/liquids can stay in, highlights potential explosives and prohibited articles." },
+  { topicId: 23, q: "Name one limitation of 3D / CT X‑Ray.", a: "Examples: subject to human error, tray size limit, time limits, can damage camera film, does not penetrate dense objects effectively." },
+
+  { topicId: 24, q: "What is special about the CT test bag with red and yellow squares?", a: "It is used to test and calibrate the machine and must always be rejected." },
+
+  { topicId: 25, q: "On X‑Ray, what colour is organic material?", a: "Orange." },
+  { topicId: 25, q: "On X‑Ray, what colour is inorganic material (e.g. metals)?", a: "Blue." },
+  { topicId: 25, q: "On X‑Ray, what colour is mixed material, and what do many homemade explosives look like?", a: "Green; most homemade explosives show up as green." },
+
+  { topicId: 26, q: "What does a brighter colour on X‑Ray usually indicate?", a: "Higher density." },
+  { topicId: 26, q: "What does a lighter colour on X‑Ray usually indicate?", a: "Lower density." },
+
+  { topicId: 27, q: "What does EDS stand for and how is it shown on screen?", a: "Explosive Detection System; shown as a system‑generated red square." },
+
+  { topicId: 28, q: "What is the Obvious Threat button used for?", a: "For obvious firearm and improvised explosive (FA and IED) threats only." },
+
+  { topicId: 29, q: "What does the shield / density alarm indicate?", a: "A density alarm automatically generated by the system, shown as a yellow square." },
+
+  { topicId: 30, q: "In operator alarms, what does purple mean? What does pink mean?", a: "Purple – drawn once identified (after slicing). Pink – when confirmed." },
+
+  { topicId: 31, q: "What does CIP stand for and why is it used?", a: "Centralised Image Processing – operators receive images from different lanes to manage workload." },
+
+  { topicId: 32, q: "What is TIP used for?", a: "Threat Image Projection – fake images used to track and test operators; only one category at a time (devices, firearms, sharps, other)." },
+
+  { topicId: 33, q: "In TIP pop‑ups, what do green and red mean?", a: "Green – correctly detected; red – incorrect detection or timed out." },
+  { topicId: 33, q: "In TIP pop‑ups, what does yellow mean?", a: "Image is real – log out and speak to the SM." }
+];
+// MOCK TEST QUESTIONS
+const questions = [
+  {
+    topicId: 1,
+    text: "Which statement best describes DfT in aviation security?",
+    options: {
+      A: "Private airport operator",
+      B: "Independent regulator of aviation",
+      C: "Government department and policy maker for transport",
+      D: "Airline trade association"
+    },
+    correct: "C"
+  },
+  {
+    topicId: 2,
+    text: "The CAA’s primary duty focuses on:",
+    options: {
+      A: "Protecting airline profits",
+      B: "Protecting consumers/passengers while regulating aviation",
+      C: "Operating airports",
+      D: "Running security checkpoints directly"
+    },
+    correct: "B"
+  },
+  {
+    topicId: 3,
+    text: "Heathrow Airport Ltd (HAL) is best described as:",
+    options: {
+      A: "A government department",
+      B: "An independent regulator",
+      C: "A private airport operator and delivery body",
+      D: "A passenger watchdog"
+    },
+    correct: "C"
+  },
+  {
+    topicId: 5,
+    text: "Threat in aviation security is defined as a combination of:",
+    options: {
+      A: "Time, place and weapon",
+      B: "Passengers, staff and aircraft",
+      C: "Motivation, intent and capability",
+      D: "Lighting, cameras and doors"
+    },
+    correct: "C"
+  },
+  {
+    topicId: 6,
+    text: "Which UK threat level means an attack is likely?",
+    options: {
+      A: "Low",
+      B: "Moderate",
+      C: "Substantial",
+      D: "Critical"
+    },
+    correct: "C"
+  },
+  {
+    topicId: 7,
+    text: "Which of the following is NOT usually listed as a threat source?",
+    options: {
+      A: "Terrorists",
+      B: "Insiders",
+      C: "Criminals",
+      D: "Passengers who follow all rules"
+    },
+    correct: "D"
+  },
+  {
+    topicId: 8,
+    text: "MTA in aviation security stands for:",
+    options: {
+      A: "Main Terminal Area",
+      B: "Marauding Terrorist Attack",
+      C: "Maximum Threat Alert",
+      D: "Multi‑Target Action"
+    },
+    correct: "B"
+  },
+  {
+    topicId: 9,
+    text: "Which group correctly lists the three basic locations of attack?",
+    options: {
+      A: "On Airport, Off Airport, On Airplane",
+      B: "Check‑in, Security, Boarding",
+      C: "Runway, Taxiway, Gate",
+      D: "Airside, Landside, Car park only"
+    },
+    correct: "A"
+  },
+  {
+    topicId: 10,
+    text: "PB, VB and DB are short for:",
+    options: {
+      A: "Passenger, baggage, document checks",
+      B: "Person‑borne, vehicle‑borne, drone‑borne devices",
+      C: "Pilot, baggage, door checks",
+      D: "Passenger, vehicle, drone identification"
+    },
+    correct: "B"
+  },
+  {
+    topicId: 11,
+    text: "If your security ID is lost or compromised, you should:",
+    options: {
+      A: "Post online asking if anyone has seen it",
+      B: "Ignore it and carry on",
+      C: "Immediately inform your supervisor / Security Manager (SM)",
+      D: "Tell a colleague but keep working as normal"
+    },
+    correct: "C"
+  },
+  {
+    topicId: 13,
+    text: "Scissors are usually prohibited in the cabin when their blades are:",
+    options: {
+      A: "Any length",
+      B: "Less than 2 cm",
+      C: "6 cm or more from the pivot",
+      D: "Only if they are metal"
+    },
+    correct: "C"
+  },
+  {
+    topicId: 14,
+    text: "Undeclared firearms and gunpowder are:",
+    options: {
+      A: "Allowed in cabin only",
+      B: "Allowed in hold only",
+      C: "Prohibited in both cabin and hold",
+      D: "Allowed if declared at boarding gate"
+    },
+    correct: "C"
+  },
+  {
+    topicId: 16,
+    text: "A firearm (FA) is defined as:",
+    options: {
+      A: "Only a working gun",
+      B: "Anything that allows a projectile (solid or liquid) to be launched, even if it only seems capable",
+      C: "Only weapons with a metal barrel",
+      D: "Any object carried in a holster"
+    },
+    correct: "B"
+  },
+  {
+    topicId: 17,
+    text: "Which of the following may indicate concealment?",
+    options: {
+      A: "Normal stitching and single zip",
+      B: "Extra stitching and extra pockets",
+      C: "Light bag with standard balance",
+      D: "Brand new bag with tags"
+    },
+    correct: "B"
+  },
+  {
+    topicId: 18,
+    text: "If you find a prohibited item (not FA/EX) in a body search, you should:",
+    options: {
+      A: "Give it back and say nothing",
+      B: "Shout at the passenger",
+      C: "Inform SM discreetly and state the search is incomplete",
+      D: "Throw it away immediately"
+    },
+    correct: "C"
+  },
+  {
+    topicId: 19,
+    text: "If you find a suspected firearm or explosive in a bag, you should:",
+    options: {
+      A: "Continue the search and hand it to the passenger",
+      B: "Stop the search immediately and discreetly inform SM, stating the search is incomplete",
+      C: "Take a photo and post it",
+      D: "Ignore it if the passenger looks calm"
+    },
+    correct: "B"
+  },
+  {
+    topicId: 22,
+    text: "Which of these is NOT a basic ammunition component?",
+    options: {
+      A: "Case",
+      B: "Primer",
+      C: "Bullet",
+      D: "Battery"
+    },
+    correct: "D"
+  },
+  {
+    topicId: 23,
+    text: "Which is a limitation of 3D / CT X‑Ray?",
+    options: {
+      A: "It cannot show inside bags",
+      B: "It cannot show rotation or slices",
+      C: "It is subject to human error and cannot screen very large or very dense objects perfectly",
+      D: "It does not highlight potential threats"
+    },
+    correct: "C"
+  },
+  {
+    topicId: 25,
+    text: "On X‑Ray, mixed materials often appear as:",
+    options: {
+      A: "Orange",
+      B: "Blue",
+      C: "Green",
+      D: "Purple"
+    },
+    correct: "C"
+  },
+  {
+    topicId: 27,
+    text: "An EDS alert is usually shown as:",
+    options: {
+      A: "A green circle",
+      B: "A red square",
+      C: "A blue triangle",
+      D: "A yellow star"
+    },
+    correct: "B"
+  },
+  {
+    topicId: 28,
+    text: "The Obvious Threat button should be used when:",
+    options: {
+      A: "You are unsure about any bag",
+      B: "You see an obvious firearm or IED threat",
+      C: "You see any dense object",
+      D: "You want to end your shift early"
+    },
+    correct: "B"
+  },
+  {
+    topicId: 29,
+    text: "A shield / density alarm (yellow square) indicates:",
+    options: {
+      A: "Only organic material",
+      B: "Only liquids",
+      C: "Very dense areas that may conceal items",
+      D: "A system software error"
+    },
+    correct: "C"
+  },
+  {
+    topicId: 32,
+    text: "TIP (Threat Image Projection) is used to:",
+    options: {
+      A: "Decorate the X‑Ray screen",
+      B: "Project movies for passengers",
+      C: "Insert fake threat images to test operators",
+      D: "Calibrate conveyor speed"
+    },
+    correct: "C"
+  },
+  {
+    topicId: 33,
+    text: "In TIP pop‑ups, yellow means:",
+    options: {
+      A: "Correct detection",
+      B: "Incorrect detection",
+      C: "Timeout",
+      D: "Real image – log out and speak to the SM"
+    },
+    correct: "D"
+  }
+];
