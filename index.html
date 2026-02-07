@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Aviation Security – Interactive Notes</title>
+  <title>Aviation Security – Notes (Anchor Navigation)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -10,17 +10,13 @@
       --bg-alt: #0d1018;
       --card: #141824;
       --accent: #4f8bff;
-      --accent-soft: rgba(79,139,255,0.12);
       --danger: #ff4f6a;
-      --warn: #ffb347;
       --success: #45d483;
       --text: #f5f7ff;
       --muted: #9aa0b5;
-      --border-subtle: #252b3a;
       --shadow-soft: 0 18px 40px rgba(0,0,0,0.65);
       --radius-lg: 18px;
       --radius-pill: 999px;
-      --transition-fast: 180ms ease-out;
       --font-body: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
         "Segoe UI", sans-serif;
       --font-mono: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -166,7 +162,6 @@
       display: grid;
       grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
       gap: 20px;
-      min-height: 520px;
     }
 
     @media (max-width: 880px) {
@@ -182,7 +177,7 @@
       }
     }
 
-    /* Sidebar as interactive nav */
+    /* Sidebar */
 
     .side-panel {
       background: radial-gradient(circle at top, rgba(255,255,255,0.04) 0, transparent 55%),
@@ -208,9 +203,6 @@
     .side-panel-inner {
       position: relative;
       z-index: 1;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
     }
 
     .side-heading {
@@ -246,20 +238,23 @@
     }
 
     .topic-item {
-      padding: 8px 10px;
-      font-size: 0.82rem;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 8px;
       border-bottom: 1px solid rgba(255,255,255,0.03);
-      backdrop-filter: blur(4px);
-      cursor: pointer;
-      transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
     }
 
     .topic-item:last-child {
       border-bottom: none;
+    }
+
+    .topic-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      backdrop-filter: blur(4px);
+      transition: background-color 180ms ease-out, color 180ms ease-out, transform 180ms ease-out;
     }
 
     .topic-bullet {
@@ -270,22 +265,15 @@
       flex-shrink: 0;
     }
 
-    .topic-item:hover {
+    .topic-link:hover {
       background: radial-gradient(circle at left, rgba(79,139,255,0.2) 0, transparent 70%);
       color: #e6ecff;
       transform: translateX(1px);
     }
 
-    .topic-item.active {
-      background: radial-gradient(circle at left, rgba(79,139,255,0.22) 0, transparent 60%);
-      color: #eaf0ff;
-      border-left: 2px solid rgba(79,139,255,0.9);
-      padding-left: 12px;
-    }
-
-    .topic-item.active .topic-bullet {
-      background: var(--accent);
-      box-shadow: 0 0 0 6px rgba(79,139,255,0.2);
+    .topic-link:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
 
     .chip-row {
@@ -304,11 +292,12 @@
       background: rgba(7,10,20,0.9);
     }
 
-    /* Main content panel */
+    /* Main content */
 
     .content-panel {
-      position: relative;
-      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
     section.card {
@@ -318,17 +307,6 @@
       padding: 16px 16px 14px;
       border: 1px solid rgba(255,255,255,0.04);
       box-shadow: 0 14px 32px rgba(0,0,0,0.75);
-      display: none;
-      animation: fadeIn 160ms ease-out;
-    }
-
-    section.card.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
     .card-header {
@@ -476,12 +454,6 @@
       color: var(--muted);
     }
 
-    .badge.emphasis {
-      border-color: rgba(79,139,255,0.7);
-      background: rgba(79,139,255,0.18);
-      color: #dfe7ff;
-    }
-
     .badge.critical {
       border-color: rgba(255,79,106,0.8);
       background: rgba(255,79,106,0.12);
@@ -530,13 +502,12 @@
       background: var(--accent);
     }
 
-    code {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      padding: 1px 5px;
-      border-radius: 999px;
-      background: rgba(0,0,0,0.6);
-      border: 1px solid rgba(255,255,255,0.06);
+    a.anchor-target {
+      position: relative;
+      top: -12px;
+      display: block;
+      visibility: hidden;
+      height: 0;
     }
   </style>
 </head>
@@ -551,7 +522,7 @@
               Aviation Security
               <span class="badge">Interactive Notes</span>
             </h1>
-            <p>Click a topic on the left to view content on the right.</p>
+            <p>Click a topic on the left; content scrolls into view on the right.</p>
           </div>
         </div>
         <div class="header-meta">
@@ -570,60 +541,82 @@
         <aside class="side-panel" aria-label="Topics overview">
           <div class="side-panel-inner">
             <h2 class="side-heading">Topics map</h2>
-            <ul class="topic-list" id="topicList">
-              <li class="topic-item active" data-target="card-dft">
-                <span class="topic-bullet"></span>
-                DfT / CAA / Heathrow – Basics
+            <ul class="topic-list">
+              <li class="topic-item">
+                <a class="topic-link" href="#dft">
+                  <span class="topic-bullet"></span>
+                  DfT / CAA / Heathrow – Basics
+                </a>
               </li>
-              <li class="topic-item" data-target="card-threat-mitc">
-                <span class="topic-bullet"></span>
-                Threat & Threat Levels (MITC)
+              <li class="topic-item">
+                <a class="topic-link" href="#threat-mitc">
+                  <span class="topic-bullet"></span>
+                  Threat & Threat Levels (MITC)
+                </a>
               </li>
-              <li class="topic-item" data-target="card-sources-attack">
-                <span class="topic-bullet"></span>
-                Threat Sources & Attack Types
+              <li class="topic-item">
+                <a class="topic-link" href="#sources-attack">
+                  <span class="topic-bullet"></span>
+                  Threat Sources & Attack Types
+                </a>
               </li>
-              <li class="topic-item" data-target="card-locations-devices">
-                <span class="topic-bullet"></span>
-                Locations & Device Types
+              <li class="topic-item">
+                <a class="topic-link" href="#locations-devices">
+                  <span class="topic-bullet"></span>
+                  Locations & Device Types
+                </a>
               </li>
-              <li class="topic-item" data-target="card-behaviour">
-                <span class="topic-bullet"></span>
-                Behaviour – Security Golden Rules
+              <li class="topic-item">
+                <a class="topic-link" href="#behaviour">
+                  <span class="topic-bullet"></span>
+                  Behaviour – Security Golden Rules
+                </a>
               </li>
-              <li class="topic-item" data-target="card-prohibited">
-                <span class="topic-bullet"></span>
-                RFX & Prohibited Articles
+              <li class="topic-item">
+                <a class="topic-link" href="#prohibited">
+                  <span class="topic-bullet"></span>
+                  RFX & Prohibited Articles
+                </a>
               </li>
-              <li class="topic-item" data-target="card-firearms-ammunition">
-                <span class="topic-bullet"></span>
-                Firearms & Ammunition
+              <li class="topic-item">
+                <a class="topic-link" href="#firearms-ammunition">
+                  <span class="topic-bullet"></span>
+                  Firearms & Ammunition
+                </a>
               </li>
-              <li class="topic-item" data-target="card-ied-iid">
-                <span class="topic-bullet"></span>
-                IED / IID & Explosives
+              <li class="topic-item">
+                <a class="topic-link" href="#ied-iid">
+                  <span class="topic-bullet"></span>
+                  IED / IID & Explosives
+                </a>
               </li>
-              <li class="topic-item" data-target="card-suspicious-handling">
-                <span class="topic-bullet"></span>
-                Suspicious Signs & Handling
+              <li class="topic-item">
+                <a class="topic-link" href="#suspicious-handling">
+                  <span class="topic-bullet"></span>
+                  Suspicious Signs & Handling
+                </a>
               </li>
-              <li class="topic-item" data-target="card-imaging-systems">
-                <span class="topic-bullet"></span>
-                CT, X‑ray, Colours & Alarms
+              <li class="topic-item">
+                <a class="topic-link" href="#imaging-systems">
+                  <span class="topic-bullet"></span>
+                  CT, X‑ray, Colours & Alarms
+                </a>
               </li>
             </ul>
 
             <div class="chip-row">
-              <span class="chip">Click to switch topic</span>
-              <span class="chip">One panel at a time</span>
+              <span class="chip">Anchor‑based navigation</span>
+              <span class="chip">Works with no JS</span>
             </div>
           </div>
         </aside>
 
-        <!-- Main content: one card visible at a time -->
+        <!-- Main content -->
         <div class="content-panel">
+
           <!-- DfT / CAA / Heathrow -->
-          <section class="card active" id="card-dft">
+          <a id="dft" class="anchor-target"></a>
+          <section class="card">
             <div class="card-header">
               <div class="card-title">
                 Roles: DfT, CAA & Heathrow
@@ -700,8 +693,9 @@
             </div>
           </section>
 
-          <!-- Threat & levels -->
-          <section class="card" id="card-threat-mitc">
+          <!-- Threat & MITC -->
+          <a id="threat-mitc" class="anchor-target"></a>
+          <section class="card">
             <div class="card-header">
               <div class="card-title">
                 Threat & MITC
@@ -721,11 +715,11 @@
               </div>
               <div class="smart-pill">
                 <div class="smart-pill-label">Mnemonic</div>
-                <div class="smart-pill-main"><strong>MITC</strong> – “My Intent Creates Threat”</div>
+                <div class="smart-pill-main"><strong>MITC</strong> – “My Intent Creates Threat”.</div>
               </div>
               <div class="smart-pill">
                 <div class="smart-pill-label">Exam tip</div>
-                <div class="smart-pill-main">If any element ↑, overall threat can ↑.</div>
+                <div class="smart-pill-main">If any element increases, overall threat can increase.</div>
               </div>
             </div>
 
@@ -768,7 +762,8 @@
           </section>
 
           <!-- Threat sources & types -->
-          <section class="card" id="card-sources-attack">
+          <a id="sources-attack" class="anchor-target"></a>
+          <section class="card">
             <div class="card-header">
               <div class="card-title">
                 Threat Sources & Attack Types
@@ -833,7 +828,7 @@
                     <tr>
                       <td>M</td>
                       <td>Marauding terrorist attack (MTA)</td>
-                      <td rowspan="4">MSCH – “Most Serious Critical Hazards”</td>
+                      <td rowspan="4">MSCH – “Most Serious Critical Hazards”.</td>
                     </tr>
                     <tr>
                       <td>S</td>
@@ -853,8 +848,9 @@
             </div>
           </section>
 
-          <!-- Locations & device types -->
-          <section class="card" id="card-locations-devices">
+          <!-- Locations & devices -->
+          <a id="locations-devices" class="anchor-target"></a>
+          <section class="card">
             <div class="card-header">
               <div class="card-title">
                 Locations & Device Types
@@ -935,8 +931,9 @@
             </div>
           </section>
 
-          <!-- Behaviour / Golden rules -->
-          <section class="card" id="card-behaviour">
+          <!-- Behaviour -->
+          <a id="behaviour" class="anchor-target"></a>
+          <section class="card">
             <div class="card-header">
               <div class="card-title">
                 Security Behaviour – Golden Rules
@@ -971,7 +968,7 @@
                 </tr>
                 <tr>
                   <td>Protect PINs, passwords, keys, ID and equipment</td>
-                  <td>Compromised access can bypass physical checks; report immediately to Security Manager</td>
+                  <td>Compromised access can bypass controls; report immediately to Security Manager</td>
                 </tr>
                 <tr>
                   <td>Keep uniform branding hidden outside work</td>
@@ -992,8 +989,9 @@
             </div>
           </section>
 
-          <!-- RFX, prohibited items, law -->
-          <section class="card" id="card-prohibited">
+          <!-- RFX & prohibited -->
+          <a id="prohibited" class="anchor-target"></a>
+          <section class="card">
             <div class="card-header">
               <div class="card-title">
                 RFX & Prohibited Articles
@@ -1080,8 +1078,9 @@
             </div>
           </section>
 
-          <!-- Firearms & ammo -->
-          <section class="card" id="card-firearms-ammunition">
+          <!-- Firearms & ammunition -->
+          <a id="firearms-ammunition" class="anchor-target"></a>
+          <section class="card">
             <div class="card-header">
               <div class="card-title">
                 Firearms & Ammunition
@@ -1198,8 +1197,9 @@
             </table>
           </section>
 
-          <!-- IED / IID & explosives -->
-          <section class="card" id="card-ied-iid">
+          <!-- IED / IID -->
+          <a id="ied-iid" class="anchor-target"></a>
+          <section class="card">
             <div class="card-header">
               <div class="card-title">
                 IED, IID & Explosive Types
@@ -1309,8 +1309,9 @@
             </table>
           </section>
 
-          <!-- Suspicious signs & handling -->
-          <section class="card" id="card-suspicious-handling">
+          <!-- Suspicious & handling -->
+          <a id="suspicious-handling" class="anchor-target"></a>
+          <section class="card">
             <div class="card-header">
               <div class="card-title">
                 Suspicious Signs & Handling
@@ -1384,8 +1385,9 @@
             </table>
           </section>
 
-          <!-- CT, X-ray, colours, density, alarms, CIP, TIP -->
-          <section class="card" id="card-imaging-systems">
+          <!-- Imaging systems -->
+          <a id="imaging-systems" class="anchor-target"></a>
+          <section class="card">
             <div class="card-header">
               <div class="card-title">
                 CT, X‑ray, Colours & Alarms
@@ -1563,31 +1565,5 @@
       </main>
     </div>
   </div>
-
-  <script>
-    // Simple vanilla JS to switch cards when clicking left topics
-    (function () {
-      const topicItems = document.querySelectorAll('.topic-item');
-      const cards = document.querySelectorAll('.card');
-
-      function activate(targetId) {
-        cards.forEach(card => {
-          card.classList.toggle('active', card.id === targetId);
-        });
-        topicItems.forEach(item => {
-          item.classList.toggle('active', item.getAttribute('data-target') === targetId);
-        });
-      }
-
-      topicItems.forEach(item => {
-        item.addEventListener('click', () => {
-          const targetId = item.getAttribute('data-target');
-          if (targetId) {
-            activate(targetId);
-          }
-        });
-      });
-    })();
-  </script>
 </body>
 </html>
