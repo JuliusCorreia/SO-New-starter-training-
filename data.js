@@ -555,7 +555,6 @@ TIP pop‑up messages (once detected):
   }
 ];
 
-
 // ---------- FLASHCARDS ----------
 const flashcards = [
   { topicId: 1, q: "Who are DfT and what do they do?", a: "DfT is a UK government department. They are the policy maker for transport and set strategic aviation policy, including security, and are accountable to Parliament." },
