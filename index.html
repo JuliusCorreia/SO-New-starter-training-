@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Learning Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* ====== Base (Apple-ish) ====== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: #f5f5f7;
+      color: #111827;
+      line-height: 1.5;
+    }
+
+    .app-shell {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    header {
+      padding: 16px 0 8px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      margin-top: 4px;
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    /* ====== Tabs (Home navigation) ====== */
+    .tab-bar {
+      display: flex;
+      gap: 8px;
+      margin: 16px 0 20px;
+      padding: 4px;
+      background: #e5e7eb;
+      border-radius: 999px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 8px 12px;
+      font-size: 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      color: #4b5563;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .tab-btn.active {
+      background: #ffffff;
+      color: #111827;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    }
+
+    /* ====== Cards/Layout ====== */
+    .panel {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    .panel-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .panel-subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 16px;
+    }
+
+    .row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .col {
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .list {
+      list-style: none;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .list-item {
+      padding: 8px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.15s;
+    }
+
+    .list-item span {
+      font-weight: 500;
+    }
+
+    .list-item small {
+      color: #6b7280;
+      margin-left: 6px;
+    }
+
+    .list-item:hover {
+      background: #f3f4f6;
+    }
+
+    .list-item.active {
+      background: #e0f2fe;
+      color: #0f172a;
+    }
+
+    .content-body {
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      padding: 12px 14px;
+      background: #f9fafb;
+      font-size: 14px;
+      min-height: 150px;
+      white-space: pre-wrap;
+    }
+
+    /* ====== Buttons ====== */
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn-primary {
+      background: #0f62fe;
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #0f62fe;
+      border: 1px solid #0f62fe;
+    }
+
+    .btn-outline:hover {
+      background: rgba(15, 98, 254, 0.06);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: #4b5563;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    /* ====== Inputs ====== */
+    select {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 6px 12px;
+      font-size: 14px;
+      background: #f9fafb;
+      color: #111827;
+      outline: none;
+    }
+
+    select:focus {
+      border-color: #0f62fe;
+      box-shadow: 0 0 0 1px rgba(15, 98, 254, 0.35);
+    }
+
+    /* ====== Flashcards ====== */
+    .flashcard-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .flashcard {
+      width: 100%;
+      max-width: 460px;
+      height: 180px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #ffffff, #f9fafb);
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .flashcard-meta {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .flashcard-controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    /* ====== Quiz ====== */
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+
+    .quiz-question {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .quiz-options {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .quiz-option {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .quiz-option span.key {
+      font-weight: 600;
+      color: #6b7280;
+    }
+
+    .quiz-option.selected {
+      border-color: #0f62fe;
+      background: #eff6ff;
+    }
+
+    .quiz-result {
+      margin-top: 8px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* ====== Helpers ====== */
+    .hidden {
+      display: none;
+    }
+
+    .mt-8 {
+      margin-top: 8px;
+    }
+
+    .mt-12 {
+      margin-top: 12px;
+    }
+
+    .mt-16 {
+      margin-top: 16px;
+    }
+
+    .text-muted {
+      color: #6b7280;
+    }
+
+    @media (max-width: 640px) {
+      .panel {
+        padding: 12px;
+        border-radius: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <h1>Learning Hub</h1>
+      <p>Content • Flashcards • Mock Tests</p>
+    </header>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="content">Content</button>
+      <button class="tab-btn" data-tab="flashcards">Flashcards</button>
+      <button class="tab-btn" data-tab="quiz">Mock Tests</button>
+    </div>
+
+    <!-- ===== Content Panel ===== -->
+    <section id="tab-content" class="panel">
+      <div class="panel-title">Content</div>
+      <div class="panel-subtitle">
+        Select a topic and an item to read the explanation.
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <h3 class="text-muted" style="font-size:13px; margin-bottom:4px;">Topics</h3>
+          <ul id="topicList" class="list"></ul>
+        </div>
+        <div class="col">
+          <h3 class="text-muted" style="font-size:13px; margin-bottom:4px;">Items</h3>
+          <ul id="contentList" class="list"></ul>
+        </div>
+      </div>
+
+      <div class="mt-16">
+        <h3 class="text-muted" style="font-size:13px; margin-bottom:4px;">Details</h3>
+        <div id="contentBody" class="content-body">
+          Select a topic and an item to see details.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Flashcards Panel ===== -->
+    <section id="tab-flashcards" class="panel hidden">
+      <div class="panel-title">Flashcards</div>
+      <div class="panel-subtitle">
+        Pick a topic and flip through the key questions & answers.
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label class="text-muted" style="font-size:13px;">Topic</label>
+          <select id="flashTopicSelect" class="mt-8"></select>
+        </div>
+      </div>
+
+      <div class="flashcard-wrapper mt-16">
+        <div id="flashcard" class="flashcard">
+          Select a topic to begin.
+        </div>
+        <div class="flashcard-meta" id="flashMeta"></div>
+        <div class="flashcard-controls">
+          <button class="btn btn-outline" id="prevFlash">Previous</button>
+          <button class="btn btn-primary" id="toggleAnswer">Show Answer</button>
+          <button class="btn btn-outline" id="nextFlash">Next</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Quiz Panel ===== -->
+    <section id="tab-quiz" class="panel hidden">
+      <div class="panel-title">Mock Tests</div>
+      <div class="panel-subtitle">
+        Choose a topic and answer multiple-choice questions.
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label class="text-muted" style="font-size:13px;">Topic</label>
+          <select id="quizTopicSelect" class="mt-8"></select>
+        </div>
+        <div class="col" style="display:flex; align-items:flex-end; justify-content:flex-end;">
+          <button class="btn btn-primary" id="startQuiz">Start Test</button>
+        </div>
+      </div>
+
+      <div class="mt-16" id="quizArea" class="hidden">
+        <div class="quiz-meta">
+          <span id="quizProgress"></span>
+          <span id="quizTopicLabel"></span>
+        </div>
+        <div class="quiz-question" id="quizQuestionText">
+          Press “Start Test” to begin.
+        </div>
+        <div class="quiz-options" id="quizOptions"></div>
+        <div>
+          <button class="btn btn-primary" id="nextQuestionBtn">Next</button>
+          <button class="btn btn-ghost" id="restartQuizBtn" style="margin-left:8px;">Restart</button>
+        </div>
+        <div id="quizResult" class="quiz-result"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ===== Data (edit here for your own content) =====
+    const topics = [
+      { id: 1, name: "UK Aviation Governance" },
+      { id: 2, name: "Safety & Security" },
+      { id: 3, name: "Environment & Noise" }
+    ];
+
+    const contentItems = [
+      {
+        id: 1,
+        topicId: 1,
+        title: "Tripartite Structure Overview",
+        body:
+          "The UK aviation system is structured around three key bodies:\n\n" +
+          "- Department for Transport (DfT): policy maker and sponsor.\n" +
+          "- Civil Aviation Authority (CAA): independent regulator.\n" +
+          "- Heathrow Airport Ltd (HAL): private operator and delivery body.\n\n" +
+          "This separation helps avoid conflicts of interest between policy, regulation and delivery."
+      },
+      {
+        id: 2,
+        topicId: 1,
+        title: "Role of DfT",
+        body:
+          "The Department for Transport (DfT) sets strategic policy for aviation and is accountable to Parliament.\n\n" +
+          "Examples:\n" +
+          "- Airports National Policy Statement (NPS).\n" +
+          "- Overall capacity and connectivity objectives.\n\n" +
+          "DfT does not run airports; it enables others to deliver."
+      },
+      {
+        id: 3,
+        topicId: 2,
+        title: "CAA Core Duties",
+        body:
+          "The Civil Aviation Authority (CAA) regulates safety, security and economic aspects of aviation.\n\n" +
+          "Its primary duty is to protect the interests of consumers/passengers while enabling sustainable growth.\n\n" +
+          "It uses licences, inspections and price controls to influence operator behaviour."
+      },
+      {
+        id: 4,
+        topicId: 3,
+        title: "Noise and Carbon Mitigation",
+        body:
+          "All three bodies share objectives to minimise aviation noise and carbon.\n\n" +
+          "- DfT sets legal obligations and overall carbon targets.\n" +
+          "- CAA monitors performance and airspace efficiency.\n" +
+          "- Heathrow implements mitigation: quieter procedures, insulation schemes, and surface access plans."
+      }
+    ];
+
+    const flashcards = [
+      {
+        id: 1,
+        topicId: 1,
+        question: "Name the three main bodies in UK aviation governance.",
+        answer: "DfT (policy), CAA (regulator), and Heathrow Airport Ltd / HAL (operator)."
+      },
+      {
+        id: 2,
+        topicId: 1,
+        question: "Who is accountable to Parliament for aviation strategy?",
+        answer: "The Secretary of State for Transport, through the Department for Transport (DfT)."
+      },
+      {
+        id: 3,
+        topicId: 2,
+        question: "What is the primary duty of the CAA?",
+        answer: "To protect the interests of consumers/passengers while regulating safety, security and economics."
+      },
+      {
+        id: 4,
+        topicId: 3,
+        question: "Which body directly implements noise insulation schemes?",
+        answer: "Heathrow Airport Ltd (the operator) implements schemes such as noise insulation."
+      }
+    ];
+
+    const questions = [
+      {
+        id: 1,
+        topicId: 1,
+        text: "Which body sets strategic aviation policy?",
+        options: {
+          A: "Civil Aviation Authority (CAA)",
+          B: "Heathrow Airport Ltd (HAL)",
+          C: "Department for Transport (DfT)",
+          D: "Airlines"
+        },
+        correct: "C"
+      },
+      {
+        id: 2,
+        topicId: 1,
+        text: "What is the main role of HAL in the tripartite structure?",
+        options: {
+          A: "Set national policy",
+          B: "Regulate airspace safety",
+          C: "Own and operate airport infrastructure",
+          D: "Approve legislation in Parliament"
+        },
+        correct: "C"
+      },
+      {
+        id: 3,
+        topicId: 2,
+        text: "The CAA’s primary duty is to protect the interests of:",
+        options: {
+          A: "Shareholders",
+          B: "Airlines",
+          C: "Consumers/passengers",
+          D: "Airport staff"
+        },
+        correct: "C"
+      },
+      {
+        id: 4,
+        topicId: 3,
+        text: "Who sets national legal obligations on carbon and noise?",
+        options: {
+          A: "CAA",
+          B: "Heathrow Airport Ltd",
+          C: "Local councils",
+          D: "DfT / Government"
+        },
+        correct: "D"
+      }
+    ];
+
+    // ===== Tab switching =====
+    const tabs = document.querySelectorAll(".tab-btn");
+    const panels = {
+      content: document.getElementById("tab-content"),
+      flashcards: document.getElementById("tab-flashcards"),
+      quiz: document.getElementById("tab-quiz")
+    };
+
+    tabs.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        tabs.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const tab = btn.dataset.tab;
+        Object.keys(panels).forEach((k) => {
+          panels[k].classList.toggle("hidden", k !== tab);
+        });
+      });
+    });
+
+    // ===== Content logic =====
+    const topicListEl = document.getElementById("topicList");
+    const contentListEl = document.getElementById("contentList");
+    const contentBodyEl = document.getElementById("contentBody");
+
+    let selectedTopicId = null;
+    let selectedContentId = null;
+
+    function renderTopics() {
+      topicListEl.innerHTML = "";
+      topics.forEach((t) => {
+        const li = document.createElement("li");
+        li.className =
+          "list-item" + (t.id === selectedTopicId ? " active" : "");
+        li.textContent = t.name;
+        li.addEventListener("click", () => {
+          selectedTopicId = t.id;
+          selectedContentId = null;
+          renderTopics();
+          renderContentList();
+          contentBodyEl.textContent =
+            "Select an item under this topic to see details.";
+        });
+        topicListEl.appendChild(li);
+      });
+    }
+
+    function renderContentList() {
+      contentListEl.innerHTML = "";
+      const filtered = contentItems.filter((c) => c.topicId === selectedTopicId);
+      filtered.forEach((item) => {
+        const li = document.createElement("li");
+        li.className =
+          "list-item" + (item.id === selectedContentId ? " active" : "");
+        const titleSpan = document.createElement("span");
+        titleSpan.textContent = item.title;
+        li.appendChild(titleSpan);
+        li.addEventListener("click", () => {
+          selectedContentId = item.id;
+          renderContentList();
+          contentBodyEl.textContent = item.body;
+        });
+        contentListEl.appendChild(li);
+      });
+    }
+
+    // ===== Flashcards logic =====
+    const flashTopicSelect = document.getElementById("flashTopicSelect");
+    const flashcardEl = document.getElementById("flashcard");
+    const flashMetaEl = document.getElementById("flashMeta");
+    const prevFlashBtn = document.getElementById("prevFlash");
+    const nextFlashBtn = document.getElementById("nextFlash");
+    const toggleAnswerBtn = document.getElementById("toggleAnswer");
+
+    let currentFlashcards = [];
+    let flashIndex = 0;
+    let showAnswer = false;
+
+    function populateFlashTopicSelect() {
+      flashTopicSelect.innerHTML = "";
+      topics.forEach((t) => {
+        const opt = document.createElement("option");
+        opt.value = t.id;
+        opt.textContent = t.name;
+        flashTopicSelect.appendChild(opt);
+      });
+    }
+
+    function updateFlashcardView() {
+      if (!currentFlashcards.length) {
+        flashcardEl.textContent = "No flashcards for this topic yet.";
+        flashMetaEl.textContent = "";
+        return;
+      }
+      const card = currentFlashcards[flashIndex];
+      flashcardEl.textContent = showAnswer ? card.answer : card.question;
+      flashMetaEl.textContent = `Card ${flashIndex + 1} of ${
+        currentFlashcards.length
+      } • ${showAnswer ? "Answer" : "Question"}`;
+      toggleAnswerBtn.textContent = showAnswer ? "Show Question" : "Show Answer";
+    }
+
+    flashTopicSelect.addEventListener("change", () => {
+      const topicId = Number(flashTopicSelect.value);
+      currentFlashcards = flashcards.filter((f) => f.topicId === topicId);
+      flashIndex = 0;
+      showAnswer = false;
+      updateFlashcardView();
+    });
+
+    prevFlashBtn.addEventListener("click", () => {
+      if (!currentFlashcards.length) return;
+      flashIndex = (flashIndex - 1 + currentFlashcards.length) % currentFlashcards.length;
+      showAnswer = false;
+      updateFlashcardView();
+    });
+
+    nextFlashBtn.addEventListener("click", () => {
+      if (!currentFlashcards.length) return;
+      flashIndex = (flashIndex + 1) % currentFlashcards.length;
+      showAnswer = false;
+      updateFlashcardView();
+    });
+
+    toggleAnswerBtn.addEventListener("click", () => {
+      if (!currentFlashcards.length) return;
+      showAnswer = !showAnswer;
+      updateFlashcardView();
+    });
+
+    // ===== Quiz logic =====
+    const quizTopicSelect = document.getElementById("quizTopicSelect");
+    const startQuizBtn = document.getElementById("startQuiz");
+    const quizArea = document.getElementById("quizArea");
+    const quizProgressEl = document.getElementById("quizProgress");
+    const quizTopicLabelEl = document.getElementById("quizTopicLabel");
+    const quizQuestionTextEl = document.getElementById("quizQuestionText");
+    const quizOptionsEl = document.getElementById("quizOptions");
+    const nextQuestionBtn = document.getElementById("nextQuestionBtn");
+    const restartQuizBtn = document.getElementById("restartQuizBtn");
+    const quizResultEl = document.getElementById("quizResult");
+
+    let currentQuizQuestions = [];
+    let quizIndex = 0;
+    let quizScore = 0;
+    let selectedOption = null;
+
+    function populateQuizTopicSelect() {
+      quizTopicSelect.innerHTML = "";
+      topics.forEach((t) => {
+        const opt = document.createElement("option");
+        opt.value = t.id;
+        opt.textContent = t.name;
+        quizTopicSelect.appendChild(opt);
+      });
+    }
+
+    function startQuiz() {
+      const topicId = Number(quizTopicSelect.value);
+      currentQuizQuestions = questions.filter((q) => q.topicId === topicId);
+      quizIndex = 0;
+      quizScore = 0;
+      selectedOption = null;
+      quizResultEl.textContent = "";
+      if (!currentQuizQuestions.length) {
+        quizQuestionTextEl.textContent = "No questions for this topic yet.";
+        quizOptionsEl.innerHTML = "";
+        quizArea.classList.remove("hidden");
+        quizProgressEl.textContent = "";
+        quizTopicLabelEl.textContent = "";
+        return;
+      }
+      const topicName = topics.find((t) => t.id === topicId)?.name || "";
+      quizTopicLabelEl.textContent = topicName;
+      quizArea.classList.remove("hidden");
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      const q = currentQuizQuestions[quizIndex];
+      quizProgressEl.textContent = `Question ${quizIndex + 1} of ${currentQuizQuestions.length}`;
+      quizQuestionTextEl.textContent = q.text;
+      quizOptionsEl.innerHTML = "";
+      selectedOption = null;
+
+      Object.entries(q.options).forEach(([key, value]) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "quiz-option";
+        btn.innerHTML = `<span class="key">${key}</span><span>${value}</span>`;
+        btn.addEventListener("click", () => {
+          selectedOption = key;
+          Array.from(quizOptionsEl.children).forEach((child) =>
+            child.classList.remove("selected")
+          );
+          btn.classList.add("selected");
+        });
+        quizOptionsEl.appendChild(btn);
+      });
+
+      if (quizIndex === currentQuizQuestions.length - 1) {
+        nextQuestionBtn.textContent = "Finish";
+      } else {
+        nextQuestionBtn.textContent = "Next";
+      }
+    }
+
+    nextQuestionBtn.addEventListener("click", () => {
+      if (!currentQuizQuestions.length) return;
+      const q = currentQuizQuestions[quizIndex];
+      if (!selectedOption) {
+        quizResultEl.textContent = "Please choose an option before continuing.";
+        quizResultEl.style.color = "#b91c1c";
+        return;
+      }
+      if (selectedOption === q.correct) {
+        quizScore++;
+      }
+      quizResultEl.textContent = "";
+      // Next or finish
+      if (quizIndex < currentQuizQuestions.length - 1) {
+        quizIndex++;
+        renderQuizQuestion();
+      } else {
+        quizQuestionTextEl.textContent = "Test complete.";
+        quizOptionsEl.innerHTML = "";
+        quizProgressEl.textContent = "";
+        nextQuestionBtn.textContent = "Next";
+        quizResultEl.style.color = "#16a34a";
+        quizResultEl.textContent = `Score: ${quizScore} out of ${currentQuizQuestions.length}`;
+      }
+    });
+
+    restartQuizBtn.addEventListener("click", () => {
+      startQuiz();
+    });
+
+    startQuizBtn.addEventListener("click", startQuiz);
+
+    // ===== Init =====
+    function init() {
+      selectedTopicId = topics[0].id;
+      renderTopics();
+      renderContentList();
+      populateFlashTopicSelect();
+      populateQuizTopicSelect();
+    }
+
+    init();
+  </script>
+</body>
+</html>
