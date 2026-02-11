@@ -1,25 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Aviation Security – Notes (Anchor Navigation)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <title>Aviation Security – Quick Manual</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
-      --bg: #05060a;
-      --bg-alt: #0d1018;
-      --card: #141824;
-      --accent: #4f8bff;
-      --danger: #ff4f6a;
-      --success: #45d483;
-      --text: #f5f7ff;
-      --muted: #9aa0b5;
-      --shadow-soft: 0 18px 40px rgba(0,0,0,0.65);
-      --radius-lg: 18px;
-      --radius-pill: 999px;
-      --font-body: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Segoe UI", sans-serif;
-      --font-mono: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --bg: #0b1020;
+      --card: #151a2c;
+      --accent: #3da9fc;
+      --accent-soft: rgba(61,169,252,0.12);
+      --text-main: #f5f7ff;
+      --text-muted: #b5bdd9;
+      --border-subtle: #252a3c;
+      --danger: #ff6b6b;
+      --warning: #ffb347;
+      --success: #4cd964;
     }
 
     * {
@@ -28,1542 +24,1194 @@
 
     body {
       margin: 0;
-      padding: 32px 20px 40px;
-      font-family: var(--font-body);
-      background: radial-gradient(circle at top left, #171b2a 0, #05060a 46%, #020309 100%);
-      color: var(--text);
-      -webkit-font-smoothing: antialiased;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #151a2c 0, #050814 55%, #020308 100%);
+      color: var(--text-main);
+      line-height: 1.5;
     }
 
-    .app-shell {
-      max-width: 1120px;
+    .wrapper {
+      max-width: 900px;
       margin: 0 auto;
-      background: radial-gradient(circle at top right, rgba(79,139,255,0.06) 0, transparent 50%),
-                  radial-gradient(circle at bottom left, rgba(255,79,138,0.06) 0, transparent 55%),
-                  linear-gradient(145deg, #060712 0, #020308 55%, #050814 100%);
-      border-radius: 32px;
-      padding: 28px 28px 32px;
-      border: 1px solid rgba(255,255,255,0.04);
-      box-shadow: var(--shadow-soft);
-      position: relative;
-      overflow: hidden;
+      padding: 12px 12px 48px;
     }
 
-    .app-shell::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(130deg, rgba(255,255,255,0.04), transparent 40%, transparent 60%, rgba(79,139,255,0.09));
-      mix-blend-mode: soft-light;
-      opacity: 0.8;
-      pointer-events: none;
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: linear-gradient(to bottom, rgba(5,8,20,0.98), rgba(5,8,20,0.92));
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 10px 12px 8px;
+      margin: 0 -12px 12px;
     }
 
-    .app-inner {
-      position: relative;
-      z-index: 1;
-    }
-
-    header.app-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .brand-block {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .brand-mark {
-      width: 36px;
-      height: 36px;
-      border-radius: 14px;
-      background:
-        radial-gradient(circle at 25% 20%, #ffffff 0, #ffffff 8%, transparent 40%),
-        conic-gradient(from 210deg, #4f8bff, #45d483, #ffb347, #ff4f6a, #4f8bff);
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.6), 0 10px 24px rgba(0,0,0,0.75);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .brand-mark::after {
-      content: "";
-      width: 20px;
-      height: 20px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 20%, #111624 0, #020308 100%);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
-      backdrop-filter: blur(6px);
-    }
-
-    .brand-text h1 {
-      margin: 0;
-      font-size: 1.25rem;
-      letter-spacing: 0.02em;
-      font-weight: 650;
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-    }
-
-    .brand-text h1 span.badge {
-      font-size: 0.72rem;
+    header h1 {
+      font-size: 1.1rem;
+      margin: 0 0 4px;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
-      letter-spacing: 0.16em;
-      padding: 2px 8px 3px;
-      border-radius: 999px;
-      background: rgba(79,139,255,0.14);
-      color: #c6d5ff;
-      border: 1px solid rgba(79,139,255,0.55);
+      color: var(--accent);
     }
 
-    .brand-text p {
-      margin: 3px 0 0;
+    header p {
+      margin: 0;
       font-size: 0.8rem;
-      color: var(--muted);
+      color: var(--text-muted);
     }
 
-    .header-meta {
+    .toc {
       display: flex;
       flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 10px;
+      gap: 6px;
+      margin-top: 8px;
     }
 
-    .pill {
-      padding: 6px 12px;
-      border-radius: var(--radius-pill);
+    .toc a {
       font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--muted);
-      background: linear-gradient(135deg, rgba(16,255,192,0.06), rgba(6,10,22,0.9));
-    }
-
-    .pill span.dot {
-      width: 8px;
-      height: 8px;
+      padding: 5px 8px;
       border-radius: 999px;
-      background: var(--success);
-      box-shadow: 0 0 0 6px rgba(69,212,131,0.18);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      text-decoration: none;
+      background: rgba(10,14,30,0.9);
+      white-space: nowrap;
     }
 
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
-      gap: 20px;
+    .toc a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
     }
 
-    @media (max-width: 880px) {
-      .layout {
-        grid-template-columns: minmax(0, 1fr);
-      }
-      body {
-        padding: 18px 12px 28px;
-      }
-      .app-shell {
-        padding: 20px 18px 24px;
-        border-radius: 24px;
-      }
-    }
-
-    /* Sidebar */
-
-    .side-panel {
-      background: radial-gradient(circle at top, rgba(255,255,255,0.04) 0, transparent 55%),
-                  linear-gradient(150deg, #080a14 0, #050713 100%);
-      border-radius: 22px;
-      padding: 16px 14px 14px;
-      border: 1px solid rgba(255,255,255,0.04);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.75);
-      position: relative;
+    details {
+      background: rgba(10,14,30,0.94);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border-subtle);
       overflow: hidden;
     }
 
-    .side-panel::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at bottom right, rgba(79,139,255,0.16) 0, transparent 55%);
-      opacity: 0.5;
-      mix-blend-mode: soft-light;
-      pointer-events: none;
+    details[open] {
+      border-color: var(--accent-soft);
+      box-shadow: 0 0 0 1px rgba(61,169,252,0.08);
     }
 
-    .side-panel-inner {
-      position: relative;
-      z-index: 1;
-    }
-
-    .side-heading {
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--muted);
-      margin: 0 0 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .side-heading::before {
-      content: "";
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.22), transparent 60%);
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.7);
-    }
-
-    .topic-list {
+    summary {
       list-style: none;
-      margin: 0;
-      padding: 0;
-      border-radius: 16px;
-      background: rgba(5,8,18,0.9);
-      border: 1px solid rgba(255,255,255,0.05);
-      max-height: 420px;
-      overflow: hidden auto;
-    }
-
-    .topic-item {
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-    }
-
-    .topic-item:last-child {
-      border-bottom: none;
-    }
-
-    .topic-link {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 10px;
-      font-size: 0.82rem;
-      color: var(--muted);
-      text-decoration: none;
-      backdrop-filter: blur(4px);
-      transition: background-color 180ms ease-out, color 180ms ease-out, transform 180ms ease-out;
-    }
-
-    .topic-bullet {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.32);
-      flex-shrink: 0;
-    }
-
-    .topic-link:hover {
-      background: radial-gradient(circle at left, rgba(79,139,255,0.2) 0, transparent 70%);
-      color: #e6ecff;
-      transform: translateX(1px);
-    }
-
-    .topic-link:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
-    }
-
-    .chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 12px;
-    }
-
-    .chip {
-      font-size: 0.75rem;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--muted);
-      background: rgba(7,10,20,0.9);
-    }
-
-    /* Main content */
-
-    .content-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    section.card {
-      background: radial-gradient(circle at top left, rgba(255,255,255,0.04) 0, transparent 55%),
-                  linear-gradient(155deg, #0b0e1a 0, #060712 100%);
-      border-radius: var(--radius-lg);
-      padding: 16px 16px 14px;
-      border: 1px solid rgba(255,255,255,0.04);
-      box-shadow: 0 14px 32px rgba(0,0,0,0.75);
-    }
-
-    .card-header {
+      cursor: pointer;
+      padding: 10px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .card-title {
-      font-size: 0.98rem;
+      font-size: 0.9rem;
       font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      display: inline-flex;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .summary-title {
+      display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
-    .card-title-tag {
-      padding: 2px 8px;
+    .summary-tag {
       font-size: 0.7rem;
+      padding: 2px 6px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      color: var(--muted);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.05em;
     }
 
-    .card-sub {
+    .summary-arrow {
       font-size: 0.8rem;
-      color: var(--muted);
-      margin: 0 0 8px;
+      color: var(--text-muted);
+      transition: transform 0.2s ease;
     }
 
-    .smart-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 6px;
+    details[open] .summary-arrow {
+      transform: rotate(90deg);
+      color: var(--accent);
     }
 
-    .smart-pill {
-      flex: 1 1 120px;
-      min-width: 120px;
-      border-radius: 14px;
-      padding: 8px 10px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: linear-gradient(145deg, rgba(79,139,255,0.14), rgba(8,10,20,0.9));
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    .section-body {
+      padding: 0 12px 10px;
+      border-top: 1px solid rgba(32,38,60,0.9);
+      font-size: 0.86rem;
+      color: var(--text-muted);
     }
 
-    .smart-pill-label {
-      font-size: 0.74rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #c9d6ff;
+    h2 {
+      font-size: 1rem;
+      margin: 10px 0 6px;
+      color: var(--text-main);
     }
 
-    .smart-pill-main {
-      font-size: 0.88rem;
+    h3 {
+      font-size: 0.9rem;
+      margin: 8px 0 4px;
+      color: var(--text-main);
     }
 
     p {
-      margin: 4px 0;
-      font-size: 0.86rem;
-      line-height: 1.55;
+      margin: 3px 0 6px;
     }
 
-    ul {
-      margin: 4px 0 6px 0;
-      padding-left: 16px;
+    ul, ol {
+      margin: 4px 0 6px 16px;
+      padding-left: 0;
     }
 
     li {
-      font-size: 0.84rem;
-      line-height: 1.5;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
 
-    .two-col {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    @media (max-width: 720px) {
-      .two-col {
-        grid-template-columns: minmax(0, 1fr);
-      }
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      padding: 1px 6px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      margin-left: 4px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 4px 0 4px;
+      margin: 6px 0 8px;
       font-size: 0.8rem;
-      background: radial-gradient(circle at top, rgba(255,255,255,0.04) 0, transparent 55%);
-      border-radius: 14px;
+      border-radius: 6px;
       overflow: hidden;
-    }
-
-    thead {
-      background: linear-gradient(135deg, rgba(79,139,255,0.18), rgba(12,14,26,0.98));
+      background: #090d1a;
     }
 
     th, td {
-      padding: 7px 8px;
-      text-align: left;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      padding: 6px 7px;
+      border: 1px solid #252a3c;
+      vertical-align: top;
     }
 
     th {
+      background: rgba(37,42,60,0.9);
       font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      font-size: 0.72rem;
-      color: #dbe5ff;
+      color: var(--text-main);
     }
 
-    tr:last-child td {
-      border-bottom: none;
+    code {
+      font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+      font-size: 0.78rem;
+      background: #111525;
+      padding: 1px 4px;
+      border-radius: 4px;
+      border: 1px solid #252a3c;
     }
 
-    tr:nth-child(even) td {
-      background-color: rgba(4,6,16,0.8);
-    }
-
-    .badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin: 6px 0;
-    }
-
-    .badge {
-      font-size: 0.72rem;
-      padding: 3px 8px 4px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(7,9,18,0.9);
-      color: var(--muted);
-    }
-
-    .badge.critical {
-      border-color: rgba(255,79,106,0.8);
-      background: rgba(255,79,106,0.12);
-      color: #ffd8e0;
-    }
-
-    .flow {
-      border-radius: 16px;
-      border: 1px dashed rgba(255,255,255,0.16);
-      padding: 8px 8px 4px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
+    .mnemonic {
       font-size: 0.8rem;
+      padding: 4px 6px;
+      border-radius: 6px;
+      background: rgba(61,169,252,0.05);
+      border: 1px dashed rgba(61,169,252,0.35);
+      margin: 4px 0;
+    }
+
+    .hint {
+      font-size: 0.76rem;
+      color: var(--text-muted);
       margin-top: 4px;
     }
 
-    .flow-step {
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(4,7,18,0.95);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .flow-arrow {
-      opacity: 0.6;
-    }
-
-    .pill-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.74rem;
-      padding: 3px 8px 4px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: var(--muted);
-    }
-
-    .pill-tag span.icon {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--accent);
-    }
-
-    a.anchor-target {
-      position: relative;
-      top: -12px;
-      display: block;
-      visibility: hidden;
-      height: 0;
+    @media (min-width: 700px) {
+      header h1 {
+        font-size: 1.2rem;
+      }
+      .section-body {
+        font-size: 0.9rem;
+      }
+      table {
+        font-size: 0.82rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <div class="app-inner">
-      <header class="app-header">
-        <div class="brand-block">
-          <div class="brand-mark" aria-hidden="true"></div>
-          <div class="brand-text">
-            <h1>
-              Aviation Security
-              <span class="badge">Interactive Notes</span>
-            </h1>
-            <p>Click a topic on the left; content scrolls into view on the right.</p>
-          </div>
-        </div>
-        <div class="header-meta">
-          <div class="pill">
-            <span class="dot"></span>
-       
-          </div>
-          <div class="pill">
-          
-          </div>
-        </div>
-      </header>
+  <div class="wrapper">
+    <header>
+      <h1>Aviation Security Quick Manual</h1>
+      <p>Mobile-friendly crib sheet for revision and on-the-job reference.</p>
+      <div class="toc">
+        <a href="#sec1">1. Framework</a>
+        <a href="#sec2">2. Threats</a>
+        <a href="#sec3">3. Prohibited / FA</a>
+        <a href="#sec4">4. X-ray / CT</a>
+        <a href="#sec5">5. Behaviour</a>
+        <a href="#sec6">6. What-to-do</a>
+        <a href="#sec7">7. Loading</a>
+        <a href="#sec8">8. People</a>
+        <a href="#sec9">9. LAGs</a>
+        <a href="#sec10">10. Bag search</a>
+        <a href="#sec11">11. Special items</a>
+        <a href="#sec12">12. People types</a>
+        <a href="#sec13">13. Trays & H&S</a>
+      </div>
+    </header>
 
-      <main class="layout">
-        <!-- Sidebar topics / navigation -->
-        <aside class="side-panel" aria-label="Topics overview">
-          <div class="side-panel-inner">
-            <h2 class="side-heading">Topics map</h2>
-            <ul class="topic-list">
-              <li class="topic-item">
-                <a class="topic-link" href="#dft">
-                  <span class="topic-bullet"></span>
-                  DfT / CAA / Heathrow – Basics
-                </a>
-              </li>
-              <li class="topic-item">
-                <a class="topic-link" href="#threat-mitc">
-                  <span class="topic-bullet"></span>
-                  Threat & Threat Levels (MITC)
-                </a>
-              </li>
-              <li class="topic-item">
-                <a class="topic-link" href="#sources-attack">
-                  <span class="topic-bullet"></span>
-                  Threat Sources & Attack Types
-                </a>
-              </li>
-              <li class="topic-item">
-                <a class="topic-link" href="#locations-devices">
-                  <span class="topic-bullet"></span>
-                  Locations & Device Types
-                </a>
-              </li>
-              <li class="topic-item">
-                <a class="topic-link" href="#behaviour">
-                  <span class="topic-bullet"></span>
-                  Behaviour – Security Golden Rules
-                </a>
-              </li>
-              <li class="topic-item">
-                <a class="topic-link" href="#prohibited">
-                  <span class="topic-bullet"></span>
-                  RFX & Prohibited Articles
-                </a>
-              </li>
-              <li class="topic-item">
-                <a class="topic-link" href="#firearms-ammunition">
-                  <span class="topic-bullet"></span>
-                  Firearms & Ammunition
-                </a>
-              </li>
-              <li class="topic-item">
-                <a class="topic-link" href="#ied-iid">
-                  <span class="topic-bullet"></span>
-                  IED / IID & Explosives
-                </a>
-              </li>
-              <li class="topic-item">
-                <a class="topic-link" href="#suspicious-handling">
-                  <span class="topic-bullet"></span>
-                  Suspicious Signs & Handling
-                </a>
-              </li>
-              <li class="topic-item">
-                <a class="topic-link" href="#imaging-systems">
-                  <span class="topic-bullet"></span>
-                  CT, X‑ray, Colours & Alarms
-                </a>
-              </li>
+    <!-- 1. Framework -->
+    <details id="sec1" open>
+      <summary>
+        <span class="summary-title">
+          <span class="summary-tag">1</span> Aviation security framework
+        </span>
+        <span class="summary-arrow">▶</span>
+      </summary>
+      <div class="section-body">
+        <h2>1.1 Threat concept – MITC</h2>
+        <p>Threat is a combination of:</p>
+        <ul>
+          <li><strong>Motivation</strong> – why someone wants to act.</li>
+          <li><strong>Intent</strong> – how determined they are to act.</li>
+          <li><strong>Capability</strong> – what they are able to do.</li>
+          <li><strong>Threat</strong> – the overall outcome when the first three are present together.</li>
+        </ul>
+        <p>If Motivation, Intent or Capability increases, overall Threat increases.</p>
+        <div class="mnemonic">
+          <strong>Mnemonic:</strong> “My Intent Creates Threat” → Motivation, Intent, Capability, Threat.
+        </div>
+
+        <h2>1.2 DfT, CAA and Heathrow</h2>
+        <h3>DfT – Department for Transport</h3>
+        <ul>
+          <li>Government department and policy-maker for transport and aviation.</li>
+          <li>Sets strategic aviation security policy and national threat levels.</li>
+          <li>Accountable to Government and Parliament.</li>
+        </ul>
+
+        <h3>CAA – Civil Aviation Authority</h3>
+        <ul>
+          <li>Independent regulator for UK aviation.</li>
+          <li>Regulates safety and security, oversees compliance, audits and enforcement.</li>
+          <li>Protects passengers and consumers.</li>
+        </ul>
+
+        <h3>Heathrow</h3>
+        <ul>
+          <li>Airport operator.</li>
+          <li>Runs day-to-day operations.</li>
+          <li>Implements security procedures and local SOPs in line with DfT/CAA requirements.</li>
+        </ul>
+
+        <h3>Similarities and differences</h3>
+        <table>
+          <tr>
+            <th>Aspect</th>
+            <th>DfT</th>
+            <th>CAA</th>
+            <th>Heathrow</th>
+          </tr>
+          <tr>
+            <td>Role</td>
+            <td>Policy and legislation</td>
+            <td>Regulation and oversight</td>
+            <td>Front-line delivery</td>
+          </tr>
+          <tr>
+            <td>Focus</td>
+            <td>National framework, threat levels</td>
+            <td>Compliance, certification, quality assurance</td>
+            <td>Local SOPs, staff training, daily running</td>
+          </tr>
+          <tr>
+            <td>Accountability</td>
+            <td>Government and Parliament</td>
+            <td>DfT and legislation</td>
+            <td>CAA, DfT, owners, airlines</td>
+          </tr>
+        </table>
+
+        <p>The <strong>Single Consolidated Direction (SCD)</strong> sits within the <strong>National Aviation Security Programme (NASP)</strong> and sets detailed requirements for prohibited articles, screening standards and staff responsibilities.</p>
+      </div>
+    </details>
+
+    <!-- 2. Threats -->
+    <details id="sec2">
+      <summary>
+        <span class="summary-title">
+          <span class="summary-tag">2</span> Threat levels, sources and attacks
+        </span>
+        <span class="summary-arrow">▶</span>
+      </summary>
+      <div class="section-body">
+        <h2>2.1 UK terrorism threat levels</h2>
+        <p>Threat levels describe the likelihood of a terrorist attack:</p>
+        <table>
+          <tr><th>Level</th><th>Meaning</th></tr>
+          <tr><td>Low</td><td>Attack is highly unlikely.</td></tr>
+          <tr><td>Moderate</td><td>Attack is possible but not likely.</td></tr>
+          <tr><td>Substantial</td><td>Attack is likely.</td></tr>
+          <tr><td>Severe</td><td>Attack is highly likely.</td></tr>
+          <tr><td>Critical</td><td>Attack is highly likely in the near future.</td></tr>
+        </table>
+        <p>Changes in Motivation, Intent or Capability can move the threat level up or down.</p>
+
+        <h2>2.2 Sources of threat</h2>
+        <p>Threat sources include:</p>
+        <ul>
+          <li>Terrorists</li>
+          <li>Insiders</li>
+          <li>Unruly persons</li>
+          <li>Refugees</li>
+          <li>Criminals</li>
+          <li>Radicalised persons</li>
+        </ul>
+        <div class="mnemonic">
+          <strong>Mnemonic:</strong> “Trouble Is Usually Rooted in Clever Radicals”.
+        </div>
+        <table>
+          <tr><th>Word</th><th>Source</th></tr>
+          <tr><td>Trouble</td><td>Terrorists</td></tr>
+          <tr><td>Is</td><td>Insiders</td></tr>
+          <tr><td>Usually</td><td>Unruly persons</td></tr>
+          <tr><td>Rooted</td><td>Refugees</td></tr>
+          <tr><td>Clever</td><td>Criminals</td></tr>
+          <tr><td>Radicals</td><td>Radicalised</td></tr>
+        </table>
+
+        <h2>2.3 Types and locations of attack</h2>
+        <h3>Types of attack</h3>
+        <ul>
+          <li>MTA – Marauding terrorist attack</li>
+          <li>Sabotage</li>
+          <li>Cyberattack</li>
+          <li>Hijacking</li>
+        </ul>
+        <div class="mnemonic">
+          <strong>Mnemonic:</strong> MSCH – “Most Serious Critical Hazards”.
+        </div>
+
+        <h3>Locations</h3>
+        <ul>
+          <li>On Airport – inside the airport perimeter and terminals.</li>
+          <li>Off Airport – approaches, roads, rail links and public areas around the airport.</li>
+          <li>On Airplane – in the aircraft cabin or hold.</li>
+        </ul>
+        <div class="mnemonic">
+          <strong>Mnemonic:</strong> OOO – “On, Off, On”.
+        </div>
+
+        <h2>2.4 Device types and explosives</h2>
+        <h3>IED vs IID</h3>
+        <table>
+          <tr>
+            <th>Type</th><th>Description</th><th>Components</th><th>Behaviour</th>
+          </tr>
+          <tr>
+            <td>IED</td>
+            <td>Improvised Explosive Device</td>
+            <td>Main charge, detonator, firing switch/timer, power source</td>
+            <td>Explodes; requires detonation</td>
+          </tr>
+          <tr>
+            <td>IID</td>
+            <td>Incendiary Improvised Device</td>
+            <td>Container, initiation system, incendiary material, ignitor</td>
+            <td>Burns; requires ignition</td>
+          </tr>
+        </table>
+
+        <h3>Explosive types</h3>
+        <ul>
+          <li>Homemade: e.g. TATP, HMTD – sensitive and powerful.</li>
+          <li>Military: e.g. C4, PETN.</li>
+          <li>Commercial: e.g. TNT, dynamite.</li>
+        </ul>
+
+        <h3>Device deployment platforms</h3>
+        <ul>
+          <li>PBIED – Person-borne IED.</li>
+          <li>VBIED – Vehicle-borne IED.</li>
+          <li>DBIED – Drone-borne IED.</li>
+          <li>IM – Improvised mortar.</li>
+          <li>HP/D – Hand placed or delivered IED / IID.</li>
+          <li>VAAW – Vehicle as a weapon.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 3. Prohibited / Firearms -->
+    <details id="sec3">
+      <summary>
+        <span class="summary-title">
+          <span class="summary-tag">3</span> Prohibited articles, firearms and components
+        </span>
+        <span class="summary-arrow">▶</span>
+      </summary>
+      <div class="section-body">
+        <h2>3.1 Prohibited in cabin and hold</h2>
+        <h3>Examples – cabin only</h3>
+        <ul>
+          <li>Scissors with blades 6 cm or more from the pivot.</li>
+          <li>Sharp blades with blade length of 6 cm or more.</li>
+          <li>Razor blades and many tools.</li>
+          <li>Liquids over permitted cabin volume.</li>
+        </ul>
+
+        <h3>Examples – prohibited in both cabin and hold</h3>
+        <ul>
+          <li>Undeclared firearms and ammunition.</li>
+          <li>Explosive materials, detonators and fuses.</li>
+          <li>Grenades and smoke grenades.</li>
+          <li>Fireworks and pyrotechnics (including many party poppers and crackers).</li>
+        </ul>
+        <p>The legal basis is set out in the SCD and related regulations.</p>
+
+        <h2>3.2 Firearms – definition and parts</h2>
+        <p><strong>Firearm definition:</strong></p>
+        <ul>
+          <li>Any device that allows the launching of a projectile (solid or liquid).</li>
+          <li>Treated as a firearm if it appears capable of doing so, even if it does not work.</li>
+        </ul>
+
+        <h3>Revolver/basic firearm components (RE)</h3>
+        <div class="mnemonic">
+          <strong>Mnemonic:</strong> “Cool Metal Cylinder”.
+        </div>
+        <ul>
+          <li>Crane</li>
+          <li>Main frame</li>
+          <li>Cylinder</li>
+        </ul>
+
+        <h3>Self-loading firearm components</h3>
+        <div class="mnemonic">
+          <strong>Mnemonic:</strong> “Big Metal Rifle Runs Magazines Cleanly & Tight”.
+        </div>
+        <ul>
+          <li>Barrel</li>
+          <li>Main frame</li>
+          <li>Return spring</li>
+          <li>Return spring guide</li>
+          <li>Magazine</li>
+          <li>Cross pin</li>
+          <li>Top slide</li>
+        </ul>
+
+        <h3>Ammunition components</h3>
+        <div class="mnemonic">
+          <strong>Mnemonic:</strong> BCPP – “Bullet, Case, Primer, Powder”.
+        </div>
+        <ul>
+          <li>Projectile / bullet</li>
+          <li>Casing</li>
+          <li>Primer</li>
+          <li>Propellant (powder)</li>
+        </ul>
+
+        <h2>3.3 Suspicious concealment and handling prohibited items</h2>
+        <h3>Signs of concealment</h3>
+        <ul>
+          <li>Unusual location of dense items.</li>
+          <li>Abnormal weight or balance of bags.</li>
+          <li>Extra stitching or thick seams.</li>
+          <li>Additional zips or hidden compartments.</li>
+        </ul>
+
+        <h3>Handling prohibited but legal items (non-FA/EX)</h3>
+        <ul>
+          <li><strong>Body search:</strong> inform SM discreetly; mark search incomplete if required by SOP.</li>
+          <li><strong>Bag search:</strong> remove item, place out of reach, complete search, inform SM, offer options (return landside, left luggage, voluntary abandon).</li>
+        </ul>
+
+        <h3>Handling firearms or explosives (FA/EX)</h3>
+        <ul>
+          <li>Stop the search immediately.</li>
+          <li>Do not touch the item further.</li>
+          <li>Move bag and tray away if safe.</li>
+          <li>Ask customer to remain.</li>
+          <li>Discreetly inform SM and record search as incomplete.</li>
+          <li>Follow local emergency procedures.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 4. X-ray / CT / EDS / CIP / TIP -->
+    <details id="sec4">
+      <summary>
+        <span class="summary-title">
+          <span class="summary-tag">4</span> X-ray, CT, EDS, CIP and TIP
+        </span>
+        <span class="summary-arrow">▶</span>
+      </summary>
+      <div class="section-body">
+        <h2>4.1 X-ray basics and RFX</h2>
+        <p><strong>RFX</strong> – Recognition of Firearms and Explosives – is the skill of identifying firearms, explosives and components on X-ray images.</p>
+        <h3>X-ray colour coding</h3>
+        <ul>
+          <li>Organic materials (food, paper, many explosives): <strong>orange</strong>.</li>
+          <li>Inorganic (metals, ceramics): <strong>blue</strong>.</li>
+          <li>Mixed organic/inorganic (electronics, many IED mixes): <strong>green</strong>.</li>
+        </ul>
+        <p><strong>Density:</strong> brighter = higher density, lighter/paler = lower density.</p>
+        <p>Many homemade explosives can appear as green because they mix organic and inorganic components.</p>
+
+        <h2>4.2 3D X-ray / CT – capabilities and limitations</h2>
+        <div class="mnemonic">
+          <strong>Mnemonic:</strong> FISH – Fatigue, Image rotation, Size limit, Heavy objects.
+        </div>
+        <h3>Capabilities</h3>
+        <ul>
+          <li>View inside bags without opening them.</li>
+          <li>Reduces need for manual checks of every bag.</li>
+          <li>Provides 360° rotation and slice views.</li>
+          <li>Often allows electricals and liquids to stay in the bag.</li>
+          <li>Helps highlight possible explosives and prohibited articles.</li>
+        </ul>
+        <h3>Limitations</h3>
+        <ul>
+          <li>Subject to human error and operator fatigue.</li>
+          <li>Cannot screen items larger than the tray.</li>
+          <li>Operators have maximum continuous screen time and limited decision time per image (local policy).</li>
+          <li>X-rays can damage camera film.</li>
+          <li>Very dense objects can block or distort images.</li>
+        </ul>
+
+        <h3>CT equipment test bag</h3>
+        <ul>
+          <li>Looks like a normal case externally.</li>
+          <li>Image shows specific markers (e.g. a red and a yellow square).</li>
+          <li>Used by SM to test system and operator performance.</li>
+          <li>Must always be rejected and never treated as a normal bag.</li>
+        </ul>
+
+        <h2>4.3 Automated detection and alarms</h2>
+        <h3>EDS – Explosive Detection System</h3>
+        <ul>
+          <li>Automated system highlighting potential explosive threats (often red square).</li>
+        </ul>
+
+        <h3>Obvious Threat button</h3>
+        <ul>
+          <li>Yellow button at top of the screen.</li>
+          <li>Used only for obvious firearm or explosive device threats.</li>
+        </ul>
+
+        <h3>Shield/density alarm</h3>
+        <ul>
+          <li>System-generated alarm over very dense areas (yellow square).</li>
+          <li>Indicates manual bag search is needed.</li>
+        </ul>
+
+        <h3>Operator alarms (HSO)</h3>
+        <ul>
+          <li>Purple – initial marking of suspect area.</li>
+          <li>Pink – confirmation after operator analysis.</li>
+        </ul>
+
+        <h2>4.4 CIP and TIP</h2>
+        <h3>CIP – Centralised Image Processing</h3>
+        <ul>
+          <li>Images from different lanes are sent to a central pool.</li>
+          <li>Trained operators can screen remotely, balancing workload and throughput.</li>
+        </ul>
+
+        <h3>TIP – Threat Image Projection</h3>
+        <ul>
+          <li>Simulated threat images injected into real bag images to test operators.</li>
+          <li>Only one category active at a time: devices, firearms, sharps or other.</li>
+        </ul>
+
+        <h3>TIP pop-up meanings</h3>
+        <ul>
+          <li><strong>Green</strong> – TIP image correctly detected.</li>
+          <li><strong>Red</strong> – incorrect response or timeout.</li>
+          <li><strong>Yellow</strong> – real image; log out and speak to SM.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 5. Security behaviour -->
+    <details id="sec5">
+      <summary>
+        <span class="summary-title">
+          <span class="summary-tag">5</span> Security behaviour and golden rules
+        </span>
+        <span class="summary-arrow">▶</span>
+      </summary>
+      <div class="section-body">
+        <h2>5.1 Security behaviour</h2>
+        <ul>
+          <li>Be alert to inappropriate questions.</li>
+          <li>Do not discuss security matters with people who do not need to know.</li>
+          <li>Do not post security information on social media.</li>
+          <li>Keep PINs, passwords, keys, ID and equipment secure; report compromises to SM immediately.</li>
+          <li>Keep uniform branding hidden outside work.</li>
+          <li>Return uniforms; do not throw them away.</li>
+          <li>Never misuse ID passes or access permissions.</li>
+        </ul>
+
+        <h2>5.2 Consequences of poor behaviour</h2>
+        <ul>
+          <li>Disciplinary action.</li>
+          <li>Loss of job.</li>
+          <li>Possible criminal charges.</li>
+          <li>Serious safety and security risks.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 6. What to do when -->
+    <details id="sec6">
+      <summary>
+        <span class="summary-title">
+          <span class="summary-tag">6</span> Flow-style “what to do when”
+        </span>
+        <span class="summary-arrow">▶</span>
+      </summary>
+      <div class="section-body">
+        <h2>6.1 Suspicious IED/IID image</h2>
+        <ul>
+          <li>Pause the image; use zoom, pan, slice, rotate.</li>
+          <li>If obvious firearm or IED → press Obvious Threat button.</li>
+          <li>If possible threat → mark with purple then pink alarm.</li>
+          <li>Reject bag and send for manual search.</li>
+          <li>Inform SM as per local procedures.</li>
+        </ul>
+
+        <h2>6.2 Shield/density alarm</h2>
+        <ul>
+          <li>Note yellow shield/density alarm over a dense area.</li>
+          <li>Reject the bag for manual search.</li>
+          <li>During search, check for dense or concealed items.</li>
+        </ul>
+
+        <h2>6.3 TIP pop-up</h2>
+        <ul>
+          <li><strong>Green</strong> – continue working.</li>
+          <li><strong>Red</strong> – performance issue; may need feedback/training.</li>
+          <li><strong>Yellow</strong> – real image; log out and notify SM.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 7. Loading -->
+    <details id="sec7">
+      <summary>
+        <span class="summary-title">
+          <span class="summary-tag">7</span> Checkpoint flow – loading area and greeting
+        </span>
+        <span class="summary-arrow">▶</span>
+      </summary>
+      <div class="section-body">
+        <h2>7.1 Loading area</h2>
+        <ul>
+          <li>Start position of the X-ray/3D check.</li>
+          <li>Everything must be inside the tray.</li>
+          <li>Observe passengers for hidden items and concealments.</li>
+          <li>Use profiling and conversation to assess behaviour.</li>
+        </ul>
+
+        <h3>Items that must not go through X-ray/3D</h3>
+        <ul>
+          <li>Old camera film.</li>
+          <li>Human organs – cannot go through X-ray; use ETD and call SM.</li>
+          <li>Pets.</li>
+          <li>Outside coats (to be removed).</li>
+          <li>Large metal items – manual bypass and notify SM.</li>
+        </ul>
+
+        <h2>7.2 Greeting and service</h2>
+        <ul>
+          <li>Smile and maintain eye contact.</li>
+          <li>Greet and clearly advise passengers.</li>
+          <li>Aim for excellent service; “security first, then customer service”.</li>
+          <li>Be aware of passengers’ contexts (funerals, ashes, holidays, transfers).</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 8. People screening -->
+    <details id="sec8">
+      <summary>
+        <span class="summary-title">
+          <span class="summary-tag">8</span> People screening – QPS, HHMD, SAMDEX, ETD
+        </span>
+        <span class="summary-arrow">▶</span>
+      </summary>
+      <div class="section-body">
+        <h2>8.1 Preparing passengers for QPS</h2>
+        <p>Before QPS, ensure:</p>
+        <ul>
+          <li>Coats, jackets, scarves, hats and camera glasses removed.</li>
+          <li>Shoes and boots above the ankle removed.</li>
+          <li>Belts, phones, pens and passports removed.</li>
+          <li>Pockets fully emptied.</li>
+          <li>Large belt pouches, textured jumpers, large hair accessories and large jewellery removed.</li>
+          <li>Religious wear can stay on (per SOP).</li>
+        </ul>
+        <p><strong>Rules:</strong> all passengers pass through QPS unless an exception applies; passenger should only pass through once – if body search starts, it must be completed.</p>
+
+        <h3>QPS flow</h3>
+        <ul>
+          <li>Prepare passenger and remove required items.</li>
+          <li>Identify exceptions (wheelchair, infant, pacemaker, very tall).</li>
+          <li>If exception → adapted search (manual, HHMD, ETD).</li>
+          <li>If no exception → run QPS scan.</li>
+          <li>If clear → passenger continues.</li>
+          <li>If activation → follow QPS activation logic.</li>
+        </ul>
+
+        <h2>8.2 QPS zones, RND and exceptions</h2>
+        <h3>Zones</h3>
+        <ul>
+          <li>Zone 1 – head.</li>
+          <li>Zone 2 – shoulders, arms to waistband.</li>
+          <li>Zone 3 – waistband to knees.</li>
+          <li>Zone 4 – knees to feet.</li>
+        </ul>
+
+        <h3>Random (RND) activation</h3>
+        <ul>
+          <li>Always shows at left ankle.</li>
+          <li>Indicates random test – send to SAMDEX.</li>
+          <li>If RND plus real activation – ignore random marker, treat real zones as threats.</li>
+        </ul>
+
+        <h3>Scan issues</h3>
+        <ul>
+          <li>Inadequate scan → correct position, rescan once; if twice, use full body physical search.</li>
+          <li>Insufficient quality → ask passenger to step back, inform SM.</li>
+        </ul>
+
+        <h3>Non-medical refusal of QPS</h3>
+        <ul>
+          <li>Call SM.</li>
+          <li>Conduct search in private.</li>
+          <li>Remove shoes and X-ray them.</li>
+          <li>Perform full body physical search with HHMD and ETD.</li>
+          <li>Keep rejected bags in search lane.</li>
+          <li>Pregnancy is treated as non-medical for refusal and needs adapted handling.</li>
+        </ul>
+
+        <h3>QPS capabilities and limitations</h3>
+        <table>
+          <tr><th>Capabilities</th><th>Limitations</th></tr>
+          <tr><td>No gender differentiation</td><td>Cannot scan customers under 1 m tall</td></tr>
+          <tr><td>Less physically demanding for customers</td><td>Adapted search needed over 2 m height</td></tr>
+          <tr><td>Detects metallic and non-metallic items</td><td>Customer can refuse QPS</td></tr>
+          <tr><td>Clearly displays areas of concern</td><td>Requires correct standing position</td></tr>
+          <tr><td>Reduces number of full body searches</td><td>Equipment is sensitive and can be damaged</td></tr>
+        </table>
+
+        <h2>8.3 HHMD – hand held metal detector</h2>
+        <h3>Use HHMD:</h3>
+        <ul>
+          <li>For every physical body search unless medically exempt.</li>
+          <li>When physical search is restricted (plaster casts).</li>
+          <li>On areas highlighted by QPS or hard to search by hand.</li>
+        </ul>
+
+        <h3>When HHMD activates</h3>
+        <ul>
+          <li>Check ~6 inch circle around activation area with HHMD then physical search.</li>
+          <li>Note all activations and findings.</li>
+        </ul>
+
+        <h3>Capabilities and limitations</h3>
+        <table>
+          <tr><th>Capabilities</th><th>Limitations</th></tr>
+          <tr><td>Can be used anywhere</td><td>Only detects metal</td></tr>
+          <tr><td>Instant detection of metal</td><td>Limited penetration depth</td></tr>
+          <tr><td>Less intrusive than full body search</td><td>Reacts to nearby metal structures</td></tr>
+          <tr><td>Simple and easy to use</td><td>Dependent on batteries</td></tr>
+          <tr><td>Visual and audible alarm</td><td>Vulnerable to human error</td></tr>
+        </table>
+
+        <h2>8.4 SAMDEX – shoe scanner</h2>
+        <h3>Use SAMDEX:</h3>
+        <ul>
+          <li>For any QPS RND activation.</li>
+          <li>For any zone 4 activation (except boots above ankle).</li>
+        </ul>
+
+        <h3>Combination rules</h3>
+        <ul>
+          <li>RND + no shoes → ETD only.</li>
+          <li>RND + shoes → SAMDEX only.</li>
+          <li>RND + real activations → physical 6-inch search + HHMD + SAMDEX.</li>
+        </ul>
+
+        <h3>SAMDEX colours</h3>
+        <ul>
+          <li>Green – clear.</li>
+          <li>Yellow – incomplete; repeat.</li>
+          <li>Yellow ×2 – treat as real; escalate to SM.</li>
+          <li>Blue – metallic activation; escalate to SM.</li>
+          <li>Orange – possible explosive; escalate to SM.</li>
+        </ul>
+
+        <h3>Escalation</h3>
+        <ul>
+          <li>If 2x yellow, or blue, or orange → shoes off → zone 4 physical search + HHMD → shoes X-rayed.</li>
+        </ul>
+
+        <h3>Exceptions</h3>
+        <ul>
+          <li>Medical condition preventing stance → remove shoes and X-ray; if cannot remove, ETD shoes/fastenings + physical search.</li>
+          <li>Infants and babies → no need to remove shoes for SAMDEX.</li>
+          <li>Wheelchair users → do not use SAMDEX; use X-ray and ETD.</li>
+        </ul>
+
+        <h3>Non-medical refusal</h3>
+        <ul>
+          <li>Call SM.</li>
+          <li>Private search; shoes removed and X-rayed.</li>
+          <li>Full physical search + HHMD + ETD.</li>
+          <li>Rejected bags remain in lane.</li>
+          <li>Pregnancy is not a medical reason for refusal.</li>
+        </ul>
+
+        <h3>SAMDEX capabilities and limitations</h3>
+        <table>
+          <tr><th>Capabilities</th><th>Limitations</th></tr>
+          <tr><td>Often eliminates need to remove shoes</td><td>Only one foot scanned at a time</td></tr>
+          <tr><td>Detects metallic and explosive items</td><td>Nearby metal can cause misreadings</td></tr>
+          <tr><td>Provides instant results</td><td>Cannot be used by wheelchair users</td></tr>
+          <tr><td>Compact footprint</td><td>Heavy and not easily moved</td></tr>
+        </table>
+
+        <h2>8.5 ETD – people</h2>
+        <h3>Purpose</h3>
+        <ul>
+          <li>Supports body search by detecting explosive particles on clothing, skin and shoes.</li>
+        </ul>
+
+        <h3>Technique</h3>
+        <ul>
+          <li>Buttons/fastenings – both sides of both palms, around buttons.</li>
+          <li>Shoes – across, around back and laces.</li>
+          <li>Waistband – if no shoes.</li>
+          <li>Religious headwear – “halo and mohawk” pattern.</li>
+        </ul>
+
+        <h3>Use ETD for</h3>
+        <ul>
+          <li>Random activations, especially when no shoes.</li>
+          <li>QPS activations on headwear.</li>
+          <li>No buttons → use hands; no shoes → use waistband.</li>
+        </ul>
+
+        <h3>Results</h3>
+        <ul>
+          <li>Green – no explosive detected; continue.</li>
+          <li>Red – repeat; if red twice, escalate to SM.</li>
+          <li>Yellow – SM check / local procedure.</li>
+        </ul>
+
+        <h3>Health and safety</h3>
+        <ul>
+          <li>Do not use bare hands; change gloves and check traps regularly.</li>
+          <li>Keep hot liquids away from the machine.</li>
+          <li>Use footstools correctly.</li>
+          <li>SM is responsible for checks and record-keeping.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 9. LAGs & ETD (bags) -->
+    <details id="sec9">
+      <summary>
+        <span class="summary-title">
+          <span class="summary-tag">9</span> LAGs, EMA-4 and bag ETD
+        </span>
+        <span class="summary-arrow">▶</span>
+      </summary>
+      <div class="section-body">
+        <h2>9.1 LAGs – liquids, aerosols and gels</h2>
+        <ul>
+          <li>Spreads – peanut butter, jam, cream, cheese, hair gel.</li>
+          <li>Sprays – deodorant, spray paint.</li>
+          <li>Liquids that pour, spill or drink.</li>
+        </ul>
+
+        <h2>9.2 EMA-4</h2>
+        <p>Electromagnetic analyser for sealed and some unsealed LAGs, using non-ionising fields; container stays closed.</p>
+        <ul>
+          <li>Main body, control panel, inspection compartment, ATOF probe.</li>
+        </ul>
+
+        <h3>Can be tested</h3>
+        <ul>
+          <li>Sealed bottles.</li>
+          <li>Sachets.</li>
+          <li>Tetra packs.</li>
+          <li>Pouches.</li>
+          <li>Factory-sealed cans with visible measurement.</li>
+        </ul>
+
+        <h3>Cannot be tested</h3>
+        <ul>
+          <li>Open cups or paper cups.</li>
+          <li>Cups or beakers with straws.</li>
+          <li>Plastic bags of liquid.</li>
+          <li>Refillable metal containers.</li>
+          <li>Flasks and leaking containers.</li>
+        </ul>
+
+        <h3>EMA-4 results</h3>
+        <ul>
+          <li>Green – cleared.</li>
+          <li>Red – not OK; keep in cavity and escalate to SM.</li>
+          <li>Yellow once – retest.</li>
+          <li>Yellow twice – test on another machine; if green there, clear; if yellow again, escalate to SM.</li>
+        </ul>
+
+        <h3>SM actions on LAG activation</h3>
+        <ul>
+          <li>Check procedure was followed correctly.</li>
+          <li>Question and profile the passenger.</li>
+          <li>Perform extra bag/body searches.</li>
+          <li>Use voluntary abandon or disposal if needed.</li>
+          <li>Decide if passenger continues or is escalated.</li>
+          <li>Complete LAG activation paperwork.</li>
+        </ul>
+
+        <h2>9.3 ETD – bag items</h2>
+        <ul>
+          <li>ETD any wrapped item.</li>
+          <li>ETD electrical/electronic items with batteries or power.</li>
+          <li>ETD human organ containers.</li>
+          <li>ETD camera films and cameras.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 10. Bag search -->
+    <details id="sec10">
+      <summary>
+        <span class="summary-title">
+          <span class="summary-tag">10</span> Bag search – process and safety
+        </span>
+        <span class="summary-arrow">▶</span>
+      </summary>
+      <div class="section-body">
+        <h2>10.1 When bag search is required</h2>
+        <ul>
+          <li>Legal requirement whenever the system demands it.</li>
+          <li>Equipment failure.</li>
+          <li>Alarm or activation resolution.</li>
+          <li>Escalations or profiling concerns.</li>
+        </ul>
+
+        <h2>10.2 Types of bag search</h2>
+        <ul>
+          <li>Full layered search – entire tray and contents searched.</li>
+          <li>Enhanced plus – only items of concern searched.</li>
+          <li>Machine issues → revert to full layered search.</li>
+        </ul>
+
+        <h2>10.3 Bag search flow</h2>
+        <ul>
+          <li>Ask:
+            <ul>
+              <li>“May I search your bag?”</li>
+              <li>“Do you have anything sharp?”</li>
+              <li>“Can you open all zips and compartments?”</li>
             </ul>
+          </li>
+          <li>Move cleared items to clear tray.</li>
+          <li>Keep concerned items in testing tray.</li>
+          <li>Apply special rules for powders (e.g. >350 g to USA, baby powder only with child under 24 months present).</li>
+          <li>On discovery of prohibited items, follow handling rules from Section 3.3.</li>
+        </ul>
 
-            <div class="chip-row">
-              <span class="chip"></span>
-              <span class="chip"></span>
-            </div>
-          </div>
-        </aside>
+        <h2>10.4 Bag search – capabilities vs limitations</h2>
+        <table>
+          <tr><th>Capabilities</th><th>Limitations</th></tr>
+          <tr><td>Acts as visual deterrent</td><td>Requires consent</td></tr>
+          <tr><td>Can be done anywhere</td><td>May invade privacy or embarrass</td></tr>
+          <tr><td>Allows closer examination</td><td>Time-consuming</td></tr>
+          <tr><td>Uses sight, touch, hearing, smell</td><td>Can be unpleasant or unhygienic</td></tr>
+          <tr><td>Allows profiling of customers</td><td>Vulnerable to human error; some items hard to search</td></tr>
+        </table>
 
-        <!-- Main content -->
-        <div class="content-panel">
+        <h2>10.5 Health and safety during bag search</h2>
+        <ul>
+          <li>Use manual handling aids like trolleys.</li>
+          <li>Test weight before lifting trays.</li>
+          <li>Avoid overreaching, twisting, or placing hands near sensors.</li>
+          <li>Use QR code on tray to rescan images if needed.</li>
+          <li>Ask the sharps question.</li>
+          <li>Ask passengers to open and show compartments.</li>
+          <li>Wear searching gloves – mandatory.</li>
+        </ul>
+      </div>
+    </details>
 
-          <!-- DfT / CAA / Heathrow -->
-          <a id="dft" class="anchor-target"></a>
-          <section class="card">
-            <div class="card-header">
-              <div class="card-title">
-                Roles: DfT, CAA & Heathrow
-                <span class="card-title-tag">System overview</span>
-              </div>
-              <div class="pill-tag">
-                <span class="icon"></span>
-                Policy • Regulator • Operator
-              </div>
-            </div>
-            <p class="card-sub">Understand how government, regulator and airport operator work together in the aviation security system.</p>
+    <!-- 11. Special items -->
+    <details id="sec11">
+      <summary>
+        <span class="summary-title">
+          <span class="summary-tag">11</span> Special items and exemptions
+        </span>
+        <span class="summary-arrow">▶</span>
+      </summary>
+      <div class="section-body">
+        <h2>11.1 STEBs and sensitive items</h2>
+        <h3>STEBs (Security Tamper Evident Bags)</h3>
+        <ul>
+          <li>Clear plastic bags for LAGs purchased airside.</li>
+          <li>Must be sealed and have a receipt.</li>
+          <li>Placed in a separate tray and checked for tampering.</li>
+        </ul>
 
-            <div class="two-col">
-              <div>
-                <table aria-label="DfT, CAA and Heathrow basics">
-                  <thead>
-                    <tr>
-                      <th>Body</th>
-                      <th>What</th>
-                      <th>Security role</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>DfT</strong></td>
-                      <td>Government department for transport and aviation</td>
-                      <td>Sets strategic aviation security policy and threat levels, accountable to Parliament</td>
-                    </tr>
-                    <tr>
-                      <td><strong>CAA</strong></td>
-                      <td>Independent Civil Aviation Authority</td>
-                      <td>Regulates safety and security, oversees compliance, protects passengers and consumers</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Heathrow</strong></td>
-                      <td>Airport operator</td>
-                      <td>Runs daily airport operations and implements security measures on site</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div>
-                <h3 class="card-sub">Similarities & differences</h3>
-                <table aria-label="Similarities and differences between DfT, CAA and Heathrow">
-                  <thead>
-                    <tr>
-                      <th>Aspect</th>
-                      <th>DfT</th>
-                      <th>CAA</th>
-                      <th>Heathrow</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Core focus</td>
-                      <td>Policy & law</td>
-                      <td>Oversight & regulation</td>
-                      <td>Delivery & operations</td>
-                    </tr>
-                    <tr>
-                      <td>Security</td>
-                      <td colspan="3">All focused on aviation safety and security within one overall system</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div class="flow" aria-label="High-level responsibility flow">
-                  <span class="flow-step">DfT – Policy & Threat Levels</span>
-                  <span class="flow-arrow">⟶</span>
-                  <span class="flow-step">CAA – Oversight & Compliance</span>
-                  <span class="flow-arrow">⟶</span>
-                  <span class="flow-step">Heathrow – Front‑line Operations</span>
-                </div>
-              </div>
-            </div>
-          </section>
+        <h3>Cremated remains (ashes)</h3>
+        <ul>
+          <li>Can be X-rayed.</li>
+          <li>If image suggests >100 g or a prohibited article → reject, visual/physical inspection.</li>
+        </ul>
 
-          <!-- Threat & MITC -->
-          <a id="threat-mitc" class="anchor-target"></a>
-          <section class="card">
-            <div class="card-header">
-              <div class="card-title">
-                Threat & MITC
-                <span class="card-title-tag">Concept & levels</span>
-              </div>
-              <span class="pill-tag">
-                <span class="icon"></span>
-                MITC mnemonic
-              </span>
-            </div>
-            <p class="card-sub">Threat is driven by Motivation, Intent and Capability, and is expressed via UK terrorism threat levels.</p>
+        <h3>Human organs</h3>
+        <ul>
+          <li>Cannot go through X-ray.</li>
+          <li>Handled with ETD and SM involvement.</li>
+        </ul>
 
-            <div class="smart-row" aria-label="MITC smart-art">
-              <div class="smart-pill">
-                <div class="smart-pill-label">Threat formula</div>
-                <div class="smart-pill-main">Threat = Motivation + Intent + Capability</div>
-              </div>
-              <div class="smart-pill">
-                <div class="smart-pill-label">Mnemonic</div>
-                <div class="smart-pill-main"><strong>MITC</strong> – “My Intent Creates Threat”.</div>
-              </div>
-              <div class="smart-pill">
-                <div class="smart-pill-label">Exam tip</div>
-                <div class="smart-pill-main">If any element increases, overall threat can increase.</div>
-              </div>
-            </div>
+        <h3>Camera film</h3>
+        <ul>
+          <li>Escalate to SM.</li>
+          <li>Conduct full hand checks.</li>
+          <li>Avoid X-ray where possible due to film damage.</li>
+        </ul>
 
-            <table aria-label="UK terrorism threat levels">
-              <thead>
-                <tr>
-                  <th>Level</th>
-                  <th>Description</th>
-                  <th>Interpretation</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Low</td>
-                  <td>Attack is highly unlikely</td>
-                  <td>Minimal threat</td>
-                </tr>
-                <tr>
-                  <td>Moderate</td>
-                  <td>Attack is possible but not likely</td>
-                  <td>Routine vigilance</td>
-                </tr>
-                <tr>
-                  <td><strong>Substantial</strong></td>
-                  <td>Attack is likely</td>
-                  <td>Current UK national level – heightened vigilance</td>
-                </tr>
-                <tr>
-                  <td>Severe</td>
-                  <td>Attack is highly likely</td>
-                  <td>Immediate concern</td>
-                </tr>
-                <tr>
-                  <td>Critical</td>
-                  <td>Attack is highly likely in the near future</td>
-                  <td>Emergency posture</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
+        <h3>Evidence bags</h3>
+        <ul>
+          <li>Can go through X-ray.</li>
+          <li>Must not be opened or searched.</li>
+        </ul>
 
-          <!-- Threat sources & types -->
-          <a id="sources-attack" class="anchor-target"></a>
-          <section class="card">
-            <div class="card-header">
-              <div class="card-title">
-                Threat Sources & Attack Types
-                <span class="card-title-tag">Who & how</span>
-              </div>
-              <span class="pill-tag">
-                <span class="icon"></span>
-                TIURCR • MSCH
-              </span>
-            </div>
+        <h3>Diplomatic bags</h3>
+        <ul>
+          <li>Once sealed and checked by SM, exempt from standard security checks.</li>
+        </ul>
 
-            <div class="two-col">
-              <div>
-                <h3 class="card-sub">Sources of threat</h3>
-                <table aria-label="Sources of threat and mnemonic">
-                  <thead>
-                    <tr>
-                      <th>Source</th>
-                      <th>Mnemonic link</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Terrorists</td>
-                      <td>Trouble</td>
-                    </tr>
-                    <tr>
-                      <td>Insiders</td>
-                      <td>Is</td>
-                    </tr>
-                    <tr>
-                      <td>Unruly persons</td>
-                      <td>Usually</td>
-                    </tr>
-                    <tr>
-                      <td>Refugees</td>
-                      <td>Rooted</td>
-                    </tr>
-                    <tr>
-                      <td>Criminals</td>
-                      <td>Clever</td>
-                    </tr>
-                    <tr>
-                      <td>Radicalised persons</td>
-                      <td>Radicals</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <p><strong>Mnemonic:</strong> “Trouble Is Usually Rooted in Clever Radicals” (T I U R C R).</p>
-              </div>
-              <div>
-                <h3 class="card-sub">Types of attack</h3>
-                <table aria-label="Types of attack and mnemonic">
-                  <thead>
-                    <tr>
-                      <th>Letter</th>
-                      <th>Attack type</th>
-                      <th>Mnemonic phrase</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>M</td>
-                      <td>Marauding terrorist attack (MTA)</td>
-                      <td rowspan="4">MSCH – “Most Serious Critical Hazards”.</td>
-                    </tr>
-                    <tr>
-                      <td>S</td>
-                      <td>Sabotage</td>
-                    </tr>
-                    <tr>
-                      <td>C</td>
-                      <td>Cyberattack</td>
-                    </tr>
-                    <tr>
-                      <td>H</td>
-                      <td>Hijacking</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section>
+        <h2>11.2 Complex and non-complex items</h2>
+        <h3>Complex or oversized items</h3>
+        <ul>
+          <li>Examples: musical instruments, complex equipment.</li>
+          <li>Call SM; perform full hand checks (and X-ray if allowed).</li>
+        </ul>
 
-          <!-- Locations & devices -->
-          <a id="locations-devices" class="anchor-target"></a>
-          <section class="card">
-            <div class="card-header">
-              <div class="card-title">
-                Locations & Device Types
-                <span class="card-title-tag">Where & with what</span>
-              </div>
-              <span class="pill-tag">
-                <span class="icon"></span>
-                OOO • PB/VB/DB
-              </span>
-            </div>
+        <h3>Non-complex items</h3>
+        <ul>
+          <li>Walking aids, sticks, umbrellas, poster tubes – hand-search without SM.</li>
+        </ul>
 
-            <div class="two-col">
-              <div>
-                <h3 class="card-sub">Location categories</h3>
-                <table aria-label="Locations of attack">
-                  <thead>
-                    <tr>
-                      <th>Location</th>
-                      <th>Description</th>
-                      <th>Mnemonic</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>On Airport</td>
-                      <td>Inside airport perimeter / on site</td>
-                      <td rowspan="3">OOO – On, Off, On</td>
-                    </tr>
-                    <tr>
-                      <td>Off Airport</td>
-                      <td>Near airport or on connecting infrastructure (roads, rail, etc.)</td>
-                    </tr>
-                    <tr>
-                      <td>On Airplane</td>
-                      <td>In cabin or hold</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div>
-                <h3 class="card-sub">Types of device / platform</h3>
-                <table aria-label="Types of devices">
-                  <thead>
-                    <tr>
-                      <th>Code</th>
-                      <th>Description</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>PBIED</td>
-                      <td>Person‑borne IED</td>
-                    </tr>
-                    <tr>
-                      <td>VBIED</td>
-                      <td>Vehicle‑borne IED</td>
-                    </tr>
-                    <tr>
-                      <td>DBIED</td>
-                      <td>Drone‑borne IED</td>
-                    </tr>
-                    <tr>
-                      <td>IM</td>
-                      <td>Improvised mortar</td>
-                    </tr>
-                    <tr>
-                      <td>HP/D</td>
-                      <td>Hand placed or delivered IED / IID</td>
-                    </tr>
-                    <tr>
-                      <td>VAAW</td>
-                      <td>Vehicle as a weapon</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <p><strong>Quick hook:</strong> “People, Vehicles, Drones” for PB/VB/DB, then add IM, HP/D, VAAW.</p>
-              </div>
-            </div>
-          </section>
+        <h3>Pushchairs and prams</h3>
+        <ul>
+          <li>Collapsible must fit trays; if not, go through QPS and full hand check.</li>
+          <li>Must be completely emptied and stored in a tray.</li>
+        </ul>
+      </div>
+    </details>
 
-          <!-- Behaviour -->
-          <a id="behaviour" class="anchor-target"></a>
-          <section class="card">
-            <div class="card-header">
-              <div class="card-title">
-                Security Behaviour – Golden Rules
-                <span class="card-title-tag">Insider risk</span>
-              </div>
-              <span class="pill-tag">
-                <span class="icon"></span>
-                Think before you share
-              </span>
-            </div>
-            <p class="card-sub">Every member of staff is part of the security system; behaviour can reduce or create risk.</p>
+    <!-- 12. People categories -->
+    <details id="sec12">
+      <summary>
+        <span class="summary-title">
+          <span class="summary-tag">12</span> People categories, consent and authorities
+        </span>
+        <span class="summary-arrow">▶</span>
+      </summary>
+      <div class="section-body">
+        <h2>12.1 Age, consent and witnesses</h2>
+        <ul>
+          <li>Age of consent is 18 and over.</li>
+          <li>Under 18s must have a parent/guardian witnessing the entire search.</li>
+          <li>If guardian leaves → stop search and resume only when they return.</li>
+          <li>If no guardian → lane partner acts as witness.</li>
+          <li>Bring parent/guardian in first to witness.</li>
+        </ul>
 
-            <table aria-label="Security golden rules">
-              <thead>
-                <tr>
-                  <th>Rule</th>
-                  <th>Why it matters</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Be wary of inappropriate questions</td>
-                  <td>Social engineering is often used to collect security details</td>
-                </tr>
-                <tr>
-                  <td>Do not discuss security with those who do not need to know</td>
-                  <td>Limits leakage of sensitive procedures</td>
-                </tr>
-                <tr>
-                  <td>No social media posts about security or procedures</td>
-                  <td>Public posts can be used by attackers</td>
-                </tr>
-                <tr>
-                  <td>Protect PINs, passwords, keys, ID and equipment</td>
-                  <td>Compromised access can bypass controls; report immediately to Security Manager</td>
-                </tr>
-                <tr>
-                  <td>Keep uniform branding hidden outside work</td>
-                  <td>Reduces impersonation and targeting risks; uniforms must be returned, not discarded</td>
-                </tr>
-                <tr>
-                  <td>Never misuse ID</td>
-                  <td>Access control only works if IDs are used correctly</td>
-                </tr>
-              </tbody>
-            </table>
+        <h2>12.2 Gender and identity</h2>
+        <ul>
+          <li>Male officers search male passengers.</li>
+          <li>Female officers search female passengers.</li>
+          <li>For transgender and non-binary passengers: follow SOP based on how they present and ensure respectful same-gender search.</li>
+        </ul>
 
-            <div class="badge-row">
-              <span class="badge critical">Consequences: disciplinary action</span>
-              <span class="badge critical">Loss of job</span>
-              <span class="badge critical">Potential criminal charges</span>
-              <span class="badge critical">Serious safety risk</span>
-            </div>
-          </section>
+        <h2>12.3 Hidden disabilities and mobility</h2>
+        <ul>
+          <li>Sunflower lanyard indicates hidden disabilities – adapt communication and approach.</li>
+        </ul>
 
-          <!-- RFX & prohibited -->
-          <a id="prohibited" class="anchor-target"></a>
-          <section class="card">
-            <div class="card-header">
-              <div class="card-title">
-                RFX & Prohibited Articles
-                <span class="card-title-tag">What cannot fly</span>
-              </div>
-              <span class="pill-tag">
-                <span class="icon"></span>
-                RFX • SCD (law)
-              </span>
-            </div>
-            <p class="card-sub">Recognition of Firearms and Explosives (RFX) underpins screening and decision‑making at the checkpoint.</p>
+        <h3>Wheelchair users</h3>
+        <ul>
+          <li>Shoes removed before body scan.</li>
+          <li>Adapted search often replaces standard QPS.</li>
+        </ul>
 
-            <div class="two-col">
-              <div>
-                <h3 class="card-sub">RFX & screening</h3>
-                <ul>
-                  <li><strong>RFX</strong>: Recognition of Firearms and Explosives.</li>
-                  <li>X‑ray screening is used to detect prohibited articles.</li>
-                  <li>Operators must recognise shapes, densities and material signatures.</li>
-                </ul>
+        <h3>Medical aids</h3>
+        <p>Splints, braces, casts, prosthetics follow colour-coded rules (visual inspection, ETD, removal, HHMD) as per training cards.</p>
 
-                <h3 class="card-sub">Prohibited in cabin (examples)</h3>
-                <table aria-label="Prohibited in cabin examples">
-                  <thead>
-                    <tr>
-                      <th>Item</th>
-                      <th>Rule</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Scissors</td>
-                      <td>Blades <strong>6 cm or more</strong> from pivot are prohibited</td>
-                    </tr>
-                    <tr>
-                      <td>Sharp blades</td>
-                      <td>Blade length <strong>6 cm or more</strong> prohibited</td>
-                    </tr>
-                    <tr>
-                      <td>Razor blades</td>
-                      <td>Prohibited as sharp items</td>
-                    </tr>
-                    <tr>
-                      <td>Liquids</td>
-                      <td>Above allowed volume (follow current regulation for exam context)</td>
-                    </tr>
-                    <tr>
-                      <td>Other prohibited articles</td>
-                      <td>Any item on the prohibited list for the cabin</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div>
-                <h3 class="card-sub">Prohibited in cabin & hold</h3>
-                <table aria-label="Prohibited in both cabin and hold">
-                  <thead>
-                    <tr>
-                      <th>Category</th>
-                      <th>Examples</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Firearms & ammunition</td>
-                      <td>Undeclared firearms, ammunition, gunpowder</td>
-                    </tr>
-                    <tr>
-                      <td>Explosives</td>
-                      <td>Explosive materials, detonators, fuses</td>
-                    </tr>
-                    <tr>
-                      <td>Grenades</td>
-                      <td>Fragmentation and smoke grenades</td>
-                    </tr>
-                    <tr>
-                      <td>Pyrotechnics</td>
-                      <td>Fireworks, party poppers, crackers, similar items</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <p><strong>Legal basis:</strong> UK Single Consolidated Direction (SCD) sets detailed aviation security requirements and prohibited article rules.</p>
-              </div>
-            </div>
-          </section>
+        <h2>12.4 Compliance authorities and VIPs</h2>
+        <ul>
+          <li>Official items generally do not need removal.</li>
+          <li>If they must respond to an incident → stop search immediately.</li>
+          <li>Adapt searches while respecting authority; ask them to empty pockets and remove hats.</li>
+          <li>Vests and belts may be exempt.</li>
+          <li>Includes police, emergency services, escorts with detainees, VIPs, royals, dog handlers, K-card holders.</li>
+        </ul>
+      </div>
+    </details>
 
-          <!-- Firearms & ammunition -->
-          <a id="firearms-ammunition" class="anchor-target"></a>
-          <section class="card">
-            <div class="card-header">
-              <div class="card-title">
-                Firearms & Ammunition
-                <span class="card-title-tag">Definitions & parts</span>
-              </div>
-              <span class="pill-tag">
-                <span class="icon"></span>
-                FA • BCPP
-              </span>
-            </div>
+    <!-- 13. Trays & H&S -->
+    <details id="sec13">
+      <summary>
+        <span class="summary-title">
+          <span class="summary-tag">13</span> Tray management and lane health & safety
+        </span>
+        <span class="summary-arrow">▶</span>
+      </summary>
+      <div class="section-body">
+        <h2>13.1 Importance of tidy trays</h2>
+        <ul>
+          <li>Untidy trays cause delays and unnecessary rejections.</li>
+          <li>Make images harder to read; increase risk of breaches.</li>
+          <li>Cause jams, blockages and possible damage.</li>
+        </ul>
 
-            <div class="two-col">
-              <div>
-                <h3 class="card-sub">Firearm definition (FA)</h3>
-                <ul>
-                  <li>Any device that allows launching a <strong>projectile</strong> (solid or liquid).</li>
-                  <li>Treated as a firearm if it <strong>appears capable</strong> of doing so, whether or not it actually works.</li>
-                </ul>
+        <h3>Good tray practice</h3>
+        <ul>
+          <li>One bag per tray where possible.</li>
+          <li>Lay items flat.</li>
+          <li>Use pause buttons when needed.</li>
+          <li>Avoid overhanging items.</li>
+          <li>Do not push trays or place into S-bends.</li>
+          <li>Secure loose and light items.</li>
+          <li>Do not overload trays.</li>
+          <li>Use clear voice instructions.</li>
+        </ul>
 
-                <h3 class="card-sub">Revolver / basic firearm (RE) components</h3>
-                <table aria-label="Revolver components">
-                  <thead>
-                    <tr>
-                      <th>Component</th>
-                      <th>Mnemonic</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Main frame</td>
-                      <td rowspan="3">“Cool Metal Cylinder” → Crane, Main frame, Cylinder</td>
-                    </tr>
-                    <tr>
-                      <td>Crane</td>
-                    </tr>
-                    <tr>
-                      <td>Cylinder</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div>
-                <h3 class="card-sub">Self‑loading firearm components</h3>
-                <table aria-label="Self-loading firearm components">
-                  <thead>
-                    <tr>
-                      <th>Part</th>
-                      <th>Mnemonic mapping</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Barrel</td>
-                      <td>Big</td>
-                    </tr>
-                    <tr>
-                      <td>Main frame</td>
-                      <td>Metal</td>
-                    </tr>
-                    <tr>
-                      <td>Return spring</td>
-                      <td>Rifle</td>
-                    </tr>
-                    <tr>
-                      <td>Return spring guide</td>
-                      <td>Runs</td>
-                    </tr>
-                    <tr>
-                      <td>Magazine</td>
-                      <td>Magazines</td>
-                    </tr>
-                    <tr>
-                      <td>Cross pin</td>
-                      <td>Cleanly</td>
-                    </tr>
-                    <tr>
-                      <td>Top slide</td>
-                      <td>Tight</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <p><strong>Mnemonic:</strong> “Big Metal Rifle Runs Magazines Cleanly & Tight”.</p>
-              </div>
-            </div>
+        <h2>13.2 General lane safety</h2>
+        <ul>
+          <li>Do not put hands into rollers or over sensors.</li>
+          <li>Tie back hair; secure ties, scarves and lanyards.</li>
+          <li>Encourage passengers to collect items promptly.</li>
+          <li>Do not unplug equipment; watch for loose wires.</li>
+          <li>Do not lean on the QPS machine.</li>
+          <li>Clean spillages quickly; report hazards.</li>
+          <li>Use footstools safely and anti-fatigue mats where available.</li>
+          <li>Equipment testing is only done by SM.</li>
+        </ul>
+      </div>
+    </details>
 
-            <h3 class="card-sub">Ammunition components</h3>
-            <table aria-label="Ammunition components">
-              <thead>
-                <tr>
-                  <th>Component</th>
-                  <th>Description</th>
-                  <th>Mnemonic</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Projectile / bullet</td>
-                  <td>Front part that leaves the barrel</td>
-                  <td rowspan="4">BCPP – Bullet, Case, Primer, Powder</td>
-                </tr>
-                <tr>
-                  <td>Casing</td>
-                  <td>Holds other components together</td>
-                </tr>
-                <tr>
-                  <td>Primer</td>
-                  <td>Ignition source when struck</td>
-                </tr>
-                <tr>
-                  <td>Propellant (powder)</td>
-                  <td>Burns to drive the projectile forward</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-
-          <!-- IED / IID -->
-          <a id="ied-iid" class="anchor-target"></a>
-          <section class="card">
-            <div class="card-header">
-              <div class="card-title">
-                IED, IID & Explosive Types
-                <span class="card-title-tag">Explosive devices</span>
-              </div>
-              <span class="pill-tag">
-                <span class="icon"></span>
-                Explodes vs burns
-              </span>
-            </div>
-
-            <div class="two-col">
-              <div>
-                <h3 class="card-sub">IED – Improvised Explosive Device</h3>
-                <ul>
-                  <li>Behaviour: <strong>Explodes</strong>.</li>
-                  <li>Requires <strong>detonation</strong>.</li>
-                </ul>
-                <table aria-label="IED components">
-                  <thead>
-                    <tr>
-                      <th>Component</th>
-                      <th>Role</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Main charge</td>
-                      <td>Bulk explosive material</td>
-                    </tr>
-                    <tr>
-                      <td>Detonator</td>
-                      <td>Sets off the main charge</td>
-                    </tr>
-                    <tr>
-                      <td>Firing switch / timer</td>
-                      <td>Controls when device activates</td>
-                    </tr>
-                    <tr>
-                      <td>Power source / battery</td>
-                      <td>Provides electrical energy</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div>
-                <h3 class="card-sub">IID – Incendiary Improvised Device</h3>
-                <ul>
-                  <li>Behaviour: <strong>Burns</strong>.</li>
-                  <li>Requires <strong>ignition</strong>.</li>
-                </ul>
-                <table aria-label="IID components">
-                  <thead>
-                    <tr>
-                      <th>Component</th>
-                      <th>Role</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Container</td>
-                      <td>Holds incendiary material</td>
-                    </tr>
-                    <tr>
-                      <td>Initiation system</td>
-                      <td>Starts the burning reaction</td>
-                    </tr>
-                    <tr>
-                      <td>Incendiary material</td>
-                      <td>Produces intense heat / fire</td>
-                    </tr>
-                    <tr>
-                      <td>Ignitor</td>
-                      <td>Ignites the incendiary material</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <h3 class="card-sub">Types of explosives</h3>
-            <table aria-label="Types of explosives">
-              <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Examples</th>
-                  <th>Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Homemade</td>
-                  <td>TATP, HMTD</td>
-                  <td>Highly sensitive; easily detonated and very dangerous</td>
-                </tr>
-                <tr>
-                  <td>Military</td>
-                  <td>C4, PETN</td>
-                  <td>High‑performance, often used in military charges</td>
-                </tr>
-                <tr>
-                  <td>Commercial</td>
-                  <td>TNT, dynamite</td>
-                  <td>Used in industry; still high‑risk if misused</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-
-          <!-- Suspicious & handling -->
-          <a id="suspicious-handling" class="anchor-target"></a>
-          <section class="card">
-            <div class="card-header">
-              <div class="card-title">
-                Suspicious Signs & Handling
-                <span class="card-title-tag">On the job</span>
-              </div>
-              <span class="pill-tag">
-                <span class="icon"></span>
-                “Stop, step back, call SM”
-              </span>
-            </div>
-
-            <div class="two-col">
-              <div>
-                <h3 class="card-sub">Suspicious signs of concealment</h3>
-                <ul>
-                  <li>Unusual <strong>location</strong> of dense items in bags or clothing.</li>
-                  <li>Abnormal <strong>weight or balance</strong> of a bag.</li>
-                  <li>Extra <strong>stitching</strong> or reinforcement.</li>
-                  <li>Additional <strong>zips</strong> not part of the original design.</li>
-                  <li>Hidden or extra <strong>pockets / compartments</strong>.</li>
-                </ul>
-              </div>
-              <div>
-                <h3 class="card-sub">Handling prohibited items (non‑FA/EX)</h3>
-                <table aria-label="Handling prohibited items (non FA/EX)">
-                  <thead>
-                    <tr>
-                      <th>Where found</th>
-                      <th>Action</th>
-                      <th>Search status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Body search</td>
-                      <td>Inform Security Manager discreetly</td>
-                      <td>Record / report search as <strong>incomplete</strong></td>
-                    </tr>
-                    <tr>
-                      <td>Bag search</td>
-                      <td>Keep item away from passenger, continue search</td>
-                      <td>Complete the search, then inform SM; mark as <strong>complete</strong></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <h3 class="card-sub">Handling firearms / explosives concealed</h3>
-            <table aria-label="Handling firearms or explosives">
-              <thead>
-                <tr>
-                  <th>Step</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td><strong>Stop search immediately</strong> (body or bag).</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Discreetly inform the Security Manager.</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Record / report search as <strong>incomplete</strong> and follow local SOP.</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-
-          <!-- Imaging systems -->
-          <a id="imaging-systems" class="anchor-target"></a>
-          <section class="card">
-            <div class="card-header">
-              <div class="card-title">
-                CT, X‑ray, Colours & Alarms
-                <span class="card-title-tag">Imaging systems</span>
-              </div>
-              <span class="pill-tag">
-                <span class="icon"></span>
-                FISH • EDS • TIP
-              </span>
-            </div>
-
-            <div class="two-col">
-              <div>
-                <h3 class="card-sub">3D X‑ray / CT – capabilities</h3>
-                <table aria-label="CT capabilities and limitations">
-                  <thead>
-                    <tr>
-                      <th>Aspect</th>
-                      <th>Capability</th>
-                      <th>Limitation</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Visibility</td>
-                      <td>360° rotation and slice views inside bags</td>
-                      <td>Very dense objects reduce clarity</td>
-                    </tr>
-                    <tr>
-                      <td>Bag handling</td>
-                      <td>See inside without opening; reduces manual checks</td>
-                      <td>Items must still fit within tray size</td>
-                    </tr>
-                    <tr>
-                      <td>Convenience</td>
-                      <td>Liquids and electricals can often stay in bag</td>
-                      <td>Cannot handle items larger than the tunnel</td>
-                    </tr>
-                    <tr>
-                      <td>Human factor</td>
-                      <td>System supports detection and highlighting</td>
-                      <td>Subject to operator error and fatigue; limited screen‑time</td>
-                    </tr>
-                    <tr>
-                      <td>Other</td>
-                      <td>Powerful X‑rays for detailed images</td>
-                      <td>Can damage camera film</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <p><strong>Mnemonic FISH:</strong> Fatigue, Image rotation, Size limit, Heavy (dense) objects.</p>
-
-                <h3 class="card-sub">CT test bag</h3>
-                <ul>
-                  <li>Shaped like a case; used to test calibration and operator response.</li>
-                  <li>Shows a combination of a <strong>red square</strong> and <strong>yellow square</strong> in the image.</li>
-                  <li>Must <strong>always be rejected</strong> (training / test object, never allowed through).</li>
-                </ul>
-              </div>
-              <div>
-                <h3 class="card-sub">X‑ray colours & density</h3>
-                <table aria-label="X-ray colours and material types">
-                  <thead>
-                    <tr>
-                      <th>Colour</th>
-                      <th>Material type</th>
-                      <th>Examples</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Orange</td>
-                      <td>Organic (once living)</td>
-                      <td>Food, paper, many explosives</td>
-                    </tr>
-                    <tr>
-                      <td>Blue</td>
-                      <td>Inorganic (never living)</td>
-                      <td>Metals, ceramics, some minerals</td>
-                    </tr>
-                    <tr>
-                      <td>Green</td>
-                      <td>Mixed (organic + inorganic)</td>
-                      <td>Electronics, many homemade explosive mixtures</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <ul>
-                  <li><strong>Density:</strong> Brighter colour = higher density; lighter colour = lower density.</li>
-                </ul>
-
-                <h3 class="card-sub">Automated detection & alarms</h3>
-                <table aria-label="EDS and alarms">
-                  <thead>
-                    <tr>
-                      <th>Feature</th>
-                      <th>Indicator</th>
-                      <th>Meaning</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>EDS (Explosive Detection System)</td>
-                      <td>Red square</td>
-                      <td>System highlight of possible explosive threat</td>
-                    </tr>
-                    <tr>
-                      <td>Obvious Threat button</td>
-                      <td>Yellow button at top of screen</td>
-                      <td>Used only for obvious firearm or IED threats</td>
-                    </tr>
-                    <tr>
-                      <td>Shield / Density alarm</td>
-                      <td>Yellow square</td>
-                      <td>Automatic alarm for very dense areas</td>
-                    </tr>
-                    <tr>
-                      <td>Operator alarm (purple)</td>
-                      <td>Purple overlay</td>
-                      <td>Initial operator‑drawn alarm when suspect item identified</td>
-                    </tr>
-                    <tr>
-                      <td>Operator alarm (pink)</td>
-                      <td>Pink overlay</td>
-                      <td>Confirmed threat after operator review</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="two-col" style="margin-top: 10px;">
-              <div>
-                <h3 class="card-sub">CIP – Centralised Image Processing</h3>
-                <ul>
-                  <li>Images from different lanes are sent to a central pool.</li>
-                  <li>Any trained operator can screen images remotely.</li>
-                  <li>Helps balance workload and maintain throughput across lanes.</li>
-                </ul>
-              </div>
-              <div>
-                <h3 class="card-sub">TIP – Threat Image Projection</h3>
-                <ul>
-                  <li>Injects <strong>fake / training images</strong> into real X‑ray streams.</li>
-                  <li>Used to measure operator performance and alertness.</li>
-                  <li>Only one TIP category active at a time: Devices, Firearms, Sharps, Other.</li>
-                </ul>
-                <table aria-label="TIP pop-up messages">
-                  <thead>
-                    <tr>
-                      <th>Colour</th>
-                      <th>Meaning</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Green</td>
-                      <td>TIP image correctly detected</td>
-                    </tr>
-                    <tr>
-                      <td>Red</td>
-                      <td>Incorrect response or time‑out</td>
-                    </tr>
-                    <tr>
-                      <td>Yellow</td>
-                      <td>Real image – log out and speak to Security Manager</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section>
-
-        </div>
-      </main>
-    </div>
   </div>
 </body>
 </html>
